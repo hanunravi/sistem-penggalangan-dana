@@ -1,0 +1,238 @@
+.team-card-items {
+    margin-top: 30px;
+
+    .team-image {
+        position: relative;
+        overflow: hidden;
+
+        img {
+            @include imgw;
+        }
+
+        .box-shape {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+        }
+
+        .social-icon {
+            padding: 18px 15px;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.40);
+            backdrop-filter: blur(15px);
+            position: absolute;
+            right: -100%;
+            top: 20px;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 2;
+            @include transition;
+            overflow: hidden;
+
+            li {
+                margin-bottom: 10px;
+                a {
+                    width: 30px;
+                    height: 30px;
+                    line-height: 30px;
+                    text-align: center;
+                    background-color: $header-color;
+                    color: $white;
+                    border-radius: 50px;
+                    display: block;
+                    @include transition;
+
+                    &:hover {
+                        background: $theme-color;
+                        color: $white;
+                    }
+                }
+            }
+        }
+
+        &:hover {
+            .social-icon {
+                right: 8px;
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+    }
+
+    .team-content {
+        margin-top: 30px;
+        text-align: center;
+
+        h3 {
+            margin-bottom: 5px;
+            
+            a {
+                color: $header-color;
+                @include transition;
+
+                &:hover {
+                    color: $theme-color;
+                }
+            }
+        }
+
+        p {
+            color: $header-color;
+            font-size: 14px;
+        }
+    }
+}
+
+.team-details-wrapper {
+
+    .details-image {
+
+        img {
+            @include imgw;
+        }
+    }
+
+    .team-details-content {
+
+        span {
+            font-size: 14px;
+            font-weight: 400;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .social-icon {
+            @include flex;
+            gap: 10px;
+            margin-top: 15px;
+
+            a {
+                color: $white;
+                width: 25px;
+                height: 25px;
+                line-height: 25px;
+                border-radius: 50%;
+                text-align: center;
+                background-color: $black;
+                @include transition;
+                display: block;
+                font-size: 12px;
+
+                &:hover {
+                    background-color: $theme-color;
+                    color: $white;
+                }
+            }
+        }
+
+        .skills-content-items {
+        
+            .circle-progress-bar-wrapper {
+                @include flex;
+                gap: 45px;
+                margin-top: 50px;
+                margin-bottom: 30px;
+    
+                @include breakpoint (max-xxl){
+                    gap: 30px;
+                }
+    
+                @include breakpoint (max-lg){
+                    margin-top: 40px;
+                    gap: 70px;
+                }
+    
+                @include breakpoint (max-lg){
+                    gap: 20px;
+                }
+    
+                @include breakpoint (max-sm){
+                    margin-top: 30px;
+                    flex-wrap: wrap;
+                    gap: 10px;
+                }
+               
+                .single-circle-bar{
+                    margin: 0 auto;
+                    text-align: center;
+
+                    .sub-cont {
+                        font-size: 16px;
+                        line-height: 1;
+                        font-weight: 700;
+                    }
+                    .content{
+                        margin-top: 25px;
+
+                        h6{
+                            display: block;
+                            margin-bottom: 0;
+                            font-weight: 700;
+                            font-size: 18px;
+                            line-height: 135%;
+                        }
+    
+                        br {
+                            @include breakpoint (max-sm){
+                                display: block;
+                            }
+                        }
+                    }
+                    .circle-bar {
+                        position: relative;
+                        height: 200px;
+                        width: 200px;
+                    }
+                        
+                    .circle-bar div {
+                        position: absolute;
+                        height: 186px;
+                        width: 186px;
+                        border-radius: 50%;
+                    }
+                        
+                    .circle-bar div span {
+                        position: absolute;
+                        font-size: 40px;
+                        line-height: 177px;
+                        height: 177px;
+                        width: 177px;
+                        left: 5px;
+                        top: 5px;
+                        font-weight: 600;
+                        text-align: center;
+                        border-radius: 50%;
+                        background-color: $white;
+                        color: $header-color;
+                        font-family: $heading-font;
+                        margin-top: 0;
+                        display: initial;
+                    }
+                        
+                    .circle-bar .background {
+                        background-color: #EBEBEB !important;
+                    }
+                    
+                    .circle-bar .rotate {
+                        clip: rect(0 187px 100px 0);
+                        background-color: $header-color !important;
+                    }
+                    
+                    .circle-bar .left {
+                        clip: rect(0 187px 100px 0);
+                        opacity: 1;
+                        background-color: #EBEBEB !important;
+                    }
+                    
+                    .circle-bar .right {
+                        clip: rect(0 190px 100px 0);
+                        -webkit-transform: rotate(180deg);
+                        transform: rotate(180deg);
+                        opacity: 0;
+                        background-color: $header-color !important;
+                    }
+                }
+            }
+        }
+    }
+}

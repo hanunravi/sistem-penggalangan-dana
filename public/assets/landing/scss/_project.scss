@@ -1,0 +1,332 @@
+.project-wrapper {
+   // height: 665px;
+    position: relative;
+    margin-top: 70px;
+
+    @include breakpoint (max-md){
+        margin-top: 30px;
+    }
+
+    .project-card-items {
+        @include transition;
+        height: 665px;
+        position: relative;
+        z-index: 99;
+
+        @include breakpoint (max-xxl){
+            height: 550px;
+        }
+
+        @include breakpoint (max-sm){
+            margin-top: 450px;
+        }
+
+        .project-content {
+            position: absolute;
+            @include transition;
+            bottom: 5%;
+            left: 60px;
+            opacity: 0;
+            visibility: hidden;
+
+            @include breakpoint (max-xxxl){
+              left: 30px;
+            }
+
+            h4 {
+                a {
+                    color: $white;
+                }
+            }
+
+            span {
+                display: inline-block;
+                border-bottom: 1px solid $white;
+                width: 68px;
+            }
+
+            p {
+                color: $white;
+            }
+
+            .icon {
+                margin-top: 15px;
+
+                i {
+                    color: $white;
+                }
+            }
+        }
+
+        &:hover {
+            background: rgba(28, 26, 29, 0.50);
+            backdrop-filter: blur(12.5px);
+            // opacity: 1;
+            // visibility: visible;
+
+            .project-content {
+                bottom: 5%;
+                //transform: translateX(15%);
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+
+        &.active {
+            background: rgba(28, 26, 29, 0.50);
+            backdrop-filter: blur(12.5px);
+           // opacity: 1;
+           // visibility: visible;
+
+            .project-content {
+                bottom: 5%;
+                left: 60px;
+                opacity: 1;
+                visibility: visible;
+
+                @include breakpoint (max-xxxl){
+                    left: 30px;
+                }
+            }
+        }
+
+        @include breakpoint (max-xxl){
+            background: rgba(28, 26, 29, 0.50);
+            backdrop-filter: blur(12.5px);
+
+            .project-content {
+                bottom: 5%;
+                left: 60px;
+                opacity: 1;
+                visibility: visible;
+
+                @include breakpoint (max-xxxl){
+                    left: 30px;
+                }
+            }
+        }
+    }
+
+}
+
+.project-section {
+    .container-fluid {
+        padding: 0 100px;
+
+        @include breakpoint (max-xxxl){
+            padding: 0 0;
+        }
+    }
+
+}
+
+
+.project-card-items-2 {
+    margin-top: 30px;
+
+    .project-image {
+        position: relative;
+        overflow: hidden;
+
+        img {
+            @include imgw;
+            @include transition;
+        }
+
+        .project-content {
+            position: absolute;
+            bottom: -50px;;
+            opacity: 0;
+            visibility: hidden;
+            @include transition;
+            left: 30px;
+            right: 30px;
+
+            h4 {
+                a {
+                    color: $white;
+                }
+            }
+
+            span {
+                display: inline-block;
+                border-bottom: 1px solid $white;
+                width: 68px;
+            }
+
+            p {
+                color: $white;
+            }
+
+            .icon {
+                margin-top: 15px;
+
+                i {
+                    color: $white;
+                }
+            }
+        }
+    }
+
+    &:hover {
+
+        .project-image {
+            
+            img {
+                filter: blur(12.5px);
+                background: rgba(28, 26, 29, 0.40);
+            }
+
+            .project-content {
+                opacity: 1;
+                visibility: visible;
+                bottom: 30px;
+            }
+        }
+    }
+}
+
+.project-section-2 {
+
+    .container-fluid {
+        padding: 0 100px;
+
+        @include breakpoint(max-xxxl) {
+            padding: 0 30px;
+         }
+
+        @include breakpoint(max-xxl) {
+           padding: 0 50px;
+        }
+
+        @include breakpoint(max-xl) {
+            padding: 0 30px;
+        }
+    }
+
+    .project-slider {
+        margin-right: -8%;
+
+        @include breakpoint (max-xl){
+            margin-right: 0;
+        }
+    }
+}
+
+.project-section-3 {
+
+    .container-fluid {
+        padding: 0 50px;
+    }
+}
+
+.portfolio-details-wrapper {
+
+    .details-image {
+        margin-bottom: 40px;
+
+        img {
+            @include imgw;
+        }
+    }
+
+    .portfolio-deails-content {
+
+        h2 {
+            margin-bottom: 30px;
+        }
+
+        .details-list-area {
+            margin-top: 60px;
+            margin-bottom: 30px;
+            border-top: 1px solid $border-color;
+            border-bottom: 1px solid $border-color;
+            padding-top: 50px;
+            
+            .list-area {
+                display: flex;
+                gap: 200px;
+
+                @include breakpoint(max-xl) {
+                    gap: 120px;
+                }
+
+                @include breakpoint(max-lg) {
+                    gap: 100px;
+                }
+
+                @include breakpoint(max-md) {
+                    gap: 70px;
+                }
+
+                @include breakpoint(max-sm) {
+                    flex-wrap: wrap;
+                    gap: 20px;
+                }
+
+                .list-items {
+                    margin-bottom: 30px;
+
+                    li {
+
+                        .cont {
+                            @include flex;
+                            font-size: 30px;
+                            font-weight: 500;
+                            color: $header-color;
+                            font-family: $heading-font;
+                            gap: 20px;
+
+                            i {
+                                color: $theme-color;
+                                font-size: 20px;
+                            }
+                        }
+                        
+                        .link-text {
+                            font-size: 16px;
+                            font-weight: 400;
+                            color: $text-color;
+                            margin-top: 15px;
+                            display: inline-block;
+                        }
+    
+                        &:not(:last-child) {
+                            margin-bottom: 30px;
+
+                            @include breakpoint(max-lg) {
+                                margin-bottom: 20px;
+                            }
+                        }
+                    }
+
+                    h6 {
+                        a {
+                            color: $text-color;
+                        }
+                    }
+                }
+            }
+            
+        }
+    }
+}
+
+.portfolio-details.html-section {
+
+    .container-fluid {
+        padding: 0 100px;
+
+        @include breakpoint(max-lg) {
+            padding: 0 70px;
+        }
+
+        @include breakpoint(max-md) {
+            padding: 0 50px;
+        }
+
+        @include breakpoint(max-sm) {
+            padding: 0 30px;
+        }
+    }
+}

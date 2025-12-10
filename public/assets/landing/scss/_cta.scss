@@ -1,0 +1,293 @@
+.play-btn {
+
+    .video-btn {
+        width: 200px;
+        height: 200px;
+        line-height: 200px;
+        text-align: center;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.50);
+        backdrop-filter: blur(2px);
+        color: $theme-color;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        font-size: 30px;
+        transform: translate(-50%,-50%);
+
+        @include breakpoint(max-md) {
+            width: 100px;
+            height: 100px;
+            line-height: 100px;
+        }
+
+        &.style-2 {
+            backdrop-filter: blur(16.700000762939453px);
+            background-color: rgba(28, 26, 29, 0.5);
+            color: $white;
+        }
+    }
+}
+
+.vedio-area {
+    padding: 320px 0 320px;
+    background-attachment: fixed;
+    position: relative;
+
+    @include breakpoint(max-md) {
+        padding: 200px 0 200px;
+    }
+}
+
+.offer-wrapper {
+
+    .offer-content {
+        display: flex;
+        gap: 40px;
+
+        @include breakpoint(max-md) {
+            flex-wrap: wrap;
+        }
+    }
+
+    .offer-area {
+        @include flex;
+        justify-content: space-between;
+
+        @include breakpoint(max-xl) {
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .offer-list {
+            
+            li {
+                font-size: 22px;
+                font-weight: 500;
+                color: $header-color;
+                border-bottom: 1px solid $border-color;
+                padding-bottom: 20px;
+
+                @include breakpoint(max-xl) {
+                    font-size: 20px;
+                }
+                
+                &:not(:last-child) {
+                    margin-bottom: 20px;
+                }
+
+                i {
+                    margin-right: 15px;
+                    color: rgba(181, 188, 194, 1);
+                }
+            }
+        }
+    }
+}
+
+.cta-wrapper {
+    
+    .cta-content {
+        padding: 160px 0px 160px;
+        position: relative;
+
+        @include breakpoint(max-md) {
+            padding: 100px 0px 100px;
+            text-align: center;
+        }
+
+        h2 {
+            color: $white;
+
+            @include breakpoint(max-xl) {
+                font-size: 48px;
+            }
+
+            @include breakpoint(max-lg) {
+                font-size: 50px;
+            }
+
+            @include breakpoint(max-md) {
+                font-size: 35px;
+            }
+        }
+    }
+}
+
+.cta-section {
+    position: relative;
+
+    &::before {
+
+        @include before;
+        background: linear-gradient(0deg, rgba(28, 26, 29, 0.50) 0%, rgba(28, 26, 29, 0.50) 100%),;
+    }
+
+    .cta-shape {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+
+        @include breakpoint(max-lg) {
+            display: none;
+         }
+    }
+}
+
+.counter-wrapper {
+    @include flex;
+    justify-content: space-between;
+    padding: 80px 0;
+
+    @include breakpoint(max-xxxl) {
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: start;
+    }
+
+    @include breakpoint(max-xl) {
+        gap: 20px;
+    }
+
+    @include breakpoint(max-lg) {
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .counter-items {
+        @include flex;
+        gap: 20px;
+
+        @include breakpoint(max-xl) {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .icon {
+            width: 80px;
+            width: 80px;
+            text-align: center;
+            line-height: 80px;
+            border-radius: 100px;
+            background-color: #D1D2D3;
+        }
+
+        h2 {
+            font-size: 50px;
+            font-weight: 700;
+            font-family: $body-font;
+
+            @include breakpoint(max-xl) {
+                font-size: 40px;
+            }
+
+            @include breakpoint(max-lg) {
+                font-size: 35px;
+            }
+
+            @include breakpoint(max-md) {
+                font-size: 30px;
+            }
+        }
+
+        p {
+            text-transform: uppercase;
+            color: $header-color;
+        }
+    }
+}
+
+.container-fluid {
+    padding: 0 100px;
+
+    @include breakpoint(max-xl4) {
+        padding: 0 40px;
+    }
+
+    @include breakpoint(max-xl) {
+        padding: 0 30px;
+    }
+}
+
+// .counter-area {
+//     @include flex;
+//     justify-content: space-between;
+
+//     .counter-items-2 {
+
+//         h2 {
+//             font-size: 80px;
+//             font-family: $heading-font;
+//             margin-bottom: 10px;
+
+//             @include breakpoint(max-md) {
+//                 font-size: 60px;
+//             }
+
+//             @include breakpoint(max-sm) {
+//                 font-size: 40px;
+//             }
+//         }
+
+//         h5 {
+//             font-size: 20px;
+//             font-weight: 400;
+//         }
+//     }
+// }
+
+.text-items {
+    text-align: center;
+    position: relative;
+
+    .icon {
+        width: 212px;
+        height: 212px;
+        background-color: $header-color;
+        line-height: 212px;
+        text-align: center;
+        border-radius: 100px;
+        position: absolute;
+        left: 44%;
+
+        @include breakpoint (max-md){
+           width: 60px;
+           height: 60px;
+           line-height: 60px;
+        }
+
+        i {
+            color: $white;
+            font-size: 30px;
+
+            @include breakpoint (max-md){
+                font-size: 20px;
+            }
+        }
+    }
+
+    h2 {
+        font-size: 200px;
+        font-weight: 700;
+        text-transform: uppercase;
+        -webkit-text-stroke: 1px rgba(112, 112, 112, 6);
+		-webkit-text-fill-color: transparent;
+
+        @include breakpoint (max-xl){
+            font-size: 150px;
+        }
+
+        @include breakpoint (max-lg){
+            font-size: 120px;
+        }
+
+        @include breakpoint (max-md){
+            font-size: 80px;
+        }
+
+        @include breakpoint (max-sm){
+            font-size: 60px;
+        }
+    }
+}
+

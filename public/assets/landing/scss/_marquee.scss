@@ -1,0 +1,62 @@
+.scrolling-wrap {
+	overflow: hidden;
+	white-space: nowrap;
+	display: flex;
+	gap: 20px;
+
+	.comm {
+		display: flex;
+		align-items: center;
+		animation: scroll 60s linear infinite;
+		gap: 30px;
+		cursor: pointer;
+
+		.cmn-textslide {
+			font-size: 200px;
+			font-weight: 700;
+			text-transform: uppercase;
+            font-family: $heading-font;
+            line-height: 135px;
+
+			@include breakpoint(max-xl) {
+				font-size: 75px;
+				line-height: 52px;
+			}
+		}
+        
+		.text-custom-storke {
+			-webkit-text-stroke: 1px rgba(112, 112, 112, 6);
+			-webkit-text-fill-color: transparent;
+		}
+	}
+	&:hover {
+		.comm {
+			animation-play-state: paused;
+		}
+	}
+}
+
+@keyframes scroll {
+	0% {
+		transform: translateX(0);
+	}
+	100% {
+		transform: translateX(-100%);
+	}
+}
+@keyframes scroll2 {
+	0% {
+		transform: translateX(0%);
+	}
+	100% {
+		transform: translateX(-200%);
+	}
+}
+
+.marquee-section {
+
+	@include breakpoint(max-lg) {
+		margin-bottom: -10px;
+		margin-top: -10px;
+	}
+}

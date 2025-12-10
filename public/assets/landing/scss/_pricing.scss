@@ -1,0 +1,197 @@
+.pricing-card-items {
+    margin-top: 30px;
+    border: 1px solid $border-color;
+    padding: 60px;
+    background-color: $white;
+    @include transition;
+
+    @include breakpoint(max-md) {
+        padding: 30px;
+    }
+
+    .pricing-header {
+
+        .post-cart {
+            color: $text-color;
+            background: #F5EFEF;
+            padding: 10px 20px;
+            display: inline-block;
+            text-transform: uppercase;
+        }
+
+        .pricing-date {
+            margin-top: 30px;
+            border-bottom: 1px solid $border-color;
+            padding-bottom: 25px;
+            margin-bottom: 25px;
+    
+            h2 {
+                font-size: 80px;
+                font-weight: 700;
+                color: $header-color;
+    
+                span {
+                    font-size: 30px;
+                    font-weight: 500;
+                    color: $text-color;
+                    margin-left: 20px;
+                }
+            }
+        }
+    }
+
+    .price-btn {
+        margin-top: 20px;
+        
+        .theme-btn {
+            font-size: 14px;
+            font-weight: 600;
+            width: 100%;
+            padding: 10px 20px;
+            background-color: transparent;
+            border: 1px solid $border-color;
+            color: $header-color;
+            @include flex;
+            justify-content: space-between;
+    
+            i {
+                color: $white;
+                width: 35px;
+                height: 35px;
+                line-height: 35px;
+                border-radius: 50px;
+                text-align: center;
+                background-color: $header-color;
+            }
+    
+            &:hover {
+                color: $white;
+            }
+       }
+    }
+
+    .pricing-list {
+        margin-top: 20px;
+
+        li {
+            color: $header-color;
+            font-weight: 600;
+
+            @include breakpoint(max-sm) {
+                font-size: 14px;
+            }
+
+            &:not(:last-child) {
+                margin-bottom: 15px;
+            }
+
+            i {
+                margin-right: 8px;
+            }
+
+            &.active {
+                color: $border-color;
+                font-weight: 400;
+            }
+        }
+    }
+
+    .pricing-btn {
+        margin-top: 30px;
+    }
+
+    &.active-color {
+        background-color: $header-color;
+
+        .pricing-header {
+
+            .post-cart {
+
+                &.bg-color {
+                    background: #555058;
+                    color: $white;
+                }
+            }
+
+            .pricing-date {
+                border-bottom: 1px solid rgba(255, 255, 255, 0.20);
+
+                &.style-2 {
+
+                    h2 {
+                       color:  $white;
+                    }
+                }
+            }
+
+            p {
+                color: $white;
+            }
+        }
+        
+        .price-btn {
+            .theme-btn {
+                border: 1px solid rgba(255, 255, 255, 0.20);
+                color: $white;
+        
+                i {
+                    color: $white;
+                    background-color: #707070;
+                }
+        
+                &:hover {
+                    color: $white;
+                }
+            }
+        }
+
+        .pricing-list {
+
+            &.style-2 {
+
+                li {
+                    color: $white;
+
+                    i {
+                        color: $text-color;
+                    }
+                }
+            }
+        }
+
+        .pricing-btn {
+
+            &.style-2 {
+                
+                .theme-btn {
+                    background-color: $white;
+                   color: #1C1A1D;
+
+                   &::before {
+                    color: $header-color;
+                   }
+
+                   &:hover {
+                    color: $white;
+                   }
+                }
+            }
+        }
+    }
+
+    &:hover {
+        transform: translateY(-10px);
+    }
+}
+
+.pricing-section {
+    position: relative;
+    z-index: 1;
+
+    &::before {
+        @include before;
+        background-color: $bg-color;
+        z-index: -1;
+        top: -30%;
+    }
+}

@@ -1,0 +1,235 @@
+.testimonial-wrapper {
+
+    .testimonial-card-area {
+        position: relative;
+
+        @include breakpoint(max-xl) {
+            margin-bottom: 40px;
+        }
+
+        &.style-2 {
+            @include breakpoint(max-xl) {
+                margin-bottom: 0px;
+            }
+        }
+        .quate-shape {
+            position: absolute;
+            right: 0px;
+            top: 55px;
+
+            @include breakpoint(max-xl) {
+                display: none;
+            }
+        }
+
+        .testimonial-card-items {
+
+            p {
+                border-bottom: 1px solid $border-color;
+                padding-bottom: 40px;
+                margin-bottom: 40px;
+
+                &.style-2 {
+                    border-top: 1px solid $border-color;
+                    padding-top: 40px;
+                    margin-top: 40px;
+                    display: inline-block;
+                    border-bottom: none;
+                    font-size: 26px;
+                    font-weight: 500;
+                    font-family: $heading-font;
+
+                }
+            }
+    
+            .info-item {
+                @include flex;
+                gap: 30px;
+
+                @include breakpoint (max-xl){
+                    flex-wrap: wrap;
+                    gap: 20px;
+                }
+    
+                .info-content {
+                    .content {
+                        @include flex;
+                        h6 {
+                            font-weight: 700;
+                            color: $header-color;
+                            //margin-bottom: 5px;
+                            font-size: 18px;
+                        }
+    
+                        .star {
+                            display: inline-block;
+                            padding-left: 60px;
+                            position: relative;
+    
+                            &::before {
+                                @include before;
+                                width: 23px;
+                                top: 16px;
+                                left: 14px;
+                                height: 1px;
+                                background-color: $header-color;
+                            }
+    
+                            i {
+                                color: $header-color;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .array-button {
+            @include flex;
+            gap: 15px;
+            position: absolute;
+            bottom: 6px;
+            right: 25px;
+            z-index: 1;
+
+            @include breakpoint(max-xl) {
+                display: none;
+            }
+
+            .array-prev, .array-next {
+                background-color: transparent;
+                box-shadow: none;
+                border: none;
+                width: initial;
+                height: initial;
+                border: none;
+                border-radius: 0;
+                font-size: 20px;
+            }
+
+            .array-prev {
+                color: #DBDBDB;
+
+                &:hover {
+                    color: $theme-color;
+                }
+            }
+
+            .array-next {
+                color: $text-color;
+            }
+        }
+    }
+   
+    .video-thumb {
+        position: relative;
+        margin-right: -50%;
+        margin-left: 90px;
+
+        @include breakpoint(max-xl) {
+            margin-left: 0px;
+            margin-right: 0;
+        }
+
+
+        &.style-2 {
+            margin-right: -100%;
+
+            @include breakpoint(max-lg) {
+                margin-left: 0px;
+                margin-right: 0;
+            }
+        }
+
+        img {
+            @include imgw;
+        }
+
+        .video-btn {
+            width: 140px;
+            height: 140px;
+            line-height: 140px;
+            text-align: center;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.50);
+            backdrop-filter: blur(2px);
+            color: $header-color;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            font-size: 22px;
+            transform: translate(-50%,-50%);
+
+            @include breakpoint(max-lg) {
+                left: 50%;
+                width: 70px;
+                height: 70px;
+                line-height: 70px;
+            }
+
+            @include breakpoint (max-sm){
+                width: 80px;
+                height: 80px;
+                line-height: 80px;
+                font-size: 18px;
+            }
+        }
+    }
+
+    .testimonial-card-items-2 {
+        .info-item {
+            @include flex;
+            gap: 30px;
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid $border-color;
+
+            @include breakpoint (max-xl){
+                flex-wrap: wrap;
+                gap: 20px;
+            }
+
+            .info-content {
+                .content {
+                    @include flex;
+                    h6 {
+                        font-weight: 700;
+                        color: $header-color;
+                        //margin-bottom: 5px;
+                        font-size: 18px;
+                    }
+
+                    .star {
+                        display: inline-block;
+                        padding-left: 60px;
+                        position: relative;
+
+                        &::before {
+                            @include before;
+                            width: 23px;
+                            top: 16px;
+                            left: 14px;
+                            height: 1px;
+                            background-color: $header-color;
+                        }
+
+                        i {
+                            color: $header-color;
+                        }
+                    }
+                }
+            }
+        }
+
+        p {
+            font-size: 30px;
+            font-style: italic;
+            font-weight: 500;
+            font-family: $heading-font;
+            line-height: 125%;
+
+            @include breakpoint (max-md){
+                font-size: 24px;
+            }
+        }
+    }
+}

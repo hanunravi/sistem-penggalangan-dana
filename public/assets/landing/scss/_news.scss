@@ -1,0 +1,450 @@
+.news-box-items {
+    padding: 20px 20px 35px;
+    border: 1px solid $border-color;
+    margin-top: 30px;
+
+    .news-image {
+
+        img {
+            @include imgw;
+        }
+    }
+
+    .news-content {
+        margin-top: 20px;
+
+        .post-list {
+            @include flex;
+            gap: 10px;
+            background: $header-color;
+            padding: 10px 15px;
+            margin-bottom: 30px;
+
+            li {
+                font-size: 14px;
+                color: $text-color;
+                text-transform: uppercase;
+                position: relative;
+                padding-right: 10px;
+                margin-right: 10px;
+                letter-spacing: 2.1px;
+
+                &:not(:last-child) {
+
+                    &::before {
+                        @include before;
+                        width: 5px;
+                        height: 5px;
+                        border-radius: 50px;
+                        left: 104%;
+                        top: 44%;
+                        background-color: $text-color;
+                    }
+                }
+            }
+        }
+
+        h4 {
+            border-bottom: 1px solid $border-color;
+            padding-bottom: 24px;
+            margin-bottom: 24px;
+
+            @include breakpoint(max-xl) {
+                font-size: 25px;
+            }
+
+            a {
+                color: $header-color;
+                
+
+                &:hover {
+                    color: $theme-color;
+                }
+            }
+        }
+
+        .link-btn {
+            display: inline-block;
+            margin-top: 24px;
+        }
+    }
+}
+
+.news-details-wrapper {
+
+    .single-news-items {
+
+        .details-image {
+            margin-bottom: 40px;
+
+            img {
+                @include imgw
+            }
+        }
+
+        .news-deails-content {
+
+            h4 {
+                margin-bottom: 30px;
+            }
+
+            .news-card-items {
+                padding: 44px 100px;
+                background: $bg-color;
+                margin-top: 100px;
+
+                @include breakpoint (max-xl){
+                    padding: 40px;
+                }
+
+                .client-info {
+                    @include flex;
+                    gap: 25px;
+                    margin-bottom: 20px;
+
+                    @include breakpoint(max-md) {
+                        flex-wrap: wrap;
+                        justify-content: center;
+                    }
+
+                    .content {
+
+                        .star {
+                            i {
+                                color: $theme-color
+                            }
+                        }
+                    }
+                }
+
+                p {
+                    color: $header-color;
+                }
+            }
+
+            .post-list {
+                @include flex;
+                gap: 10px;
+                padding: 10px 15px;
+                margin-bottom: 30px;
+    
+                li {
+                    font-size: 14px;
+                    color: $text-color;
+                    text-transform: uppercase;
+                    position: relative;
+                    padding-right: 10px;
+                    margin-right: 10px;
+                    letter-spacing: 2.1px;
+    
+                    &:not(:last-child) {
+    
+                        &::before {
+                            @include before;
+                            width: 5px;
+                            height: 5px;
+                            border-radius: 50px;
+                            left: 104%;
+                            top: 44%;
+                            background-color: $text-color;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .tagcloud-items {
+        @include flex;
+        justify-content: space-between;
+        margin-top: 80px;
+        border-bottom: 1px solid #EFE1E1;
+        padding-bottom: 50px;
+        margin-bottom: 80px;
+
+        @include breakpoint(max-xl) {
+            margin-top: 50px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .tagcloud {
+
+            span {
+                font-weight: 500;
+                font-size: 22px;
+                color: $header-color;
+                margin-right: 8px;
+            }
+    
+            a {
+                display: inline-block;
+                border-radius: 5px;
+                padding: 10px 20px;
+                line-height: 1;
+                color: #585B6F;
+                border: 1px solid #EFE1E1;
+                margin-right: 8px;
+                text-transform: capitalize;
+                @include transition;
+
+                @include breakpoint(max-md) {
+                    padding: 10px 7px;
+                    margin-bottom: 10px;
+                }
+    
+    
+                &:hover {
+                    background-color: $theme-color;
+                    color: $white;
+                    border: 1px solid #EFE1E1;
+                }
+            }
+        }
+
+        .social-icon {
+            @include flex;
+            gap: 15px;
+            position: relative;
+            z-index: 9;
+
+        a {
+            width: 35px;
+            height: 35px;
+            line-height: 35px;
+            text-align: center;
+            font-size: 16px;
+            display: block;
+            color: $white;
+            transition: all .4s ease-in-out;
+            text-align: center;
+            background-color: $text-color;
+            border-radius: 50px;
+
+                &:hover {
+                    background-color: $theme-color;
+                    color: $white;
+                }
+            }
+        }
+    }
+
+    .comment-form-wrap {
+        border-top: 1px solid #EFE1E1;
+        padding-top: 100px;
+        margin-top: 100px;
+
+        @include breakpoint(max-lg) {
+            padding-top: 35px;
+            margin-top: 35px;
+        }
+
+        .form-clt {
+
+            input,textarea {
+                width: 100%;
+                outline: none;
+                border: none;
+                background-color: transparent;
+                border: 1px solid $border-color;
+                padding: 16px 20px;
+                font-weight: 500;
+
+                &::placeholder {
+                    color: $text-color;
+                }
+
+            }
+
+            textarea {
+                padding-bottom: 100px;
+            }
+        }
+
+        .theme-btn {
+
+            @include breakpoint(max-lg) {
+                margin-bottom: 30px;
+            }
+        }
+    }
+
+    .main-sidebar {
+
+        .single-sidebar-widget {
+            border-radius: 5px;
+            background: $bg-color-2;
+            padding: 36px 40px;
+            margin-bottom: 50px;
+
+            .wid-title {
+                margin-bottom: 30px;
+            }
+
+            .search-widget {
+                form {
+                    width: 100%;
+                    position: relative;
+            
+                    input {
+                        background: #FEF9F9;
+                        font-size: 16px;
+                        padding: 25px;
+                        width: 100%;
+                        border: none;
+                        color: $text-color;
+                    }
+            
+                    button {
+                        position: absolute;
+                        right: 0;
+                        top: 0;
+                        width: 70px;
+                        font-size: 18px;
+                        height: 100%;
+                        background-color:$theme-color;
+                        color: $white;
+                        text-align: center;
+                        transition: all .3s ease-in-out;
+                        
+                        &:hover {
+                            background-color: $header-color;
+                        }
+                    }
+                }
+            }
+
+            .news-widget-categories {
+                ul {
+                    li {
+                        
+                        @include flex;
+                        justify-content: space-between;
+                        padding: 20px;
+                        background: #FEF9F9;
+                        font-weight: 600;
+                        @include transition;
+                        color: $header-color;
+    
+                        a {
+                            color: $header-color;
+                        }
+    
+                        span {
+                            @include transition;
+                            color: $header-color;
+                        }
+    
+                        &:not(:last-child){
+                            margin-bottom: 15px;
+                        }
+    
+                        &:hover {
+                            background-color: $theme-color;
+                            color: $white;
+    
+                            a {
+                                color: $white;
+                            }
+    
+                            span {
+                                color: $white;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .recent-post-area {
+
+                .recent-items {
+                    display: flex;
+                    gap: 20px;
+                    border-radius: 5px;
+                    background: #FEF9F9;
+                    padding: 15px;
+
+                    @include breakpoint (max-xl) {
+                        flex-wrap: wrap;
+                    }
+                    
+                    .recent-thumb {
+
+                        img {
+                            border-radius: 5px;
+                        }
+                    }
+                    
+                    &:not(:last-child){
+                        margin-bottom: 15px;
+                    }
+    
+                    .recent-content {
+
+                        ul {
+                            
+                            li {
+                                font-size: 12px;
+
+                                i {
+                                    color: $theme-color;
+                                    margin-right: 10px;
+                                }
+                            }
+                        }
+
+                        h5 {
+                            font-size: 18px;
+                            margin-bottom: 5px;
+                            line-height: 28px;
+
+                            @include breakpoint (max-xl) {
+                                font-size: 16px;
+                            }
+    
+                            a {
+                                color: $header-color;
+
+                                &:hover {
+                                    color: $theme-color;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            .news-widget-categories {
+
+                .tagcloud {
+
+                    a {
+                        display: inline-block;
+                        padding: 11px 20px;
+                        line-height: 1;
+                        font-size: 14px;
+                        color: $text-color;
+                        margin-right: 5px;
+                        border: 1px solid #DCDCDC;
+                        text-transform: capitalize;
+                        margin-bottom: 10px;
+                        @include transition;
+
+                        @include breakpoint (max-xl) {
+                            padding: 11px 10px;
+                        }
+        
+                        &:last-child {
+                            margin-right: 0;            
+                        }
+                        
+                        &:hover {
+                            background-color: $theme-color;
+                            color: $white;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

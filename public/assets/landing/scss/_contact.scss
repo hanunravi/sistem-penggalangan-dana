@@ -1,0 +1,226 @@
+.newsletter-input {
+    text-align: center;
+
+    h2 {
+        margin-bottom: 10px;
+    }
+
+    .news-input {
+        position: relative;
+        margin-top: 50px;
+
+        @include breakpoint(max-xl) {
+            margin-top: 25px;
+        }
+
+        input {
+            width: 30%;
+            border: none;
+            background-color: transparent;
+            padding: 0px 0px 15px;
+            color: var(--text);
+            text-transform: capitalize;
+            border-bottom: 1px solid $text-color;
+
+            @include breakpoint(max-lg) {
+                width: 50%;
+            }
+
+            @include breakpoint(max-md) {
+                width: 55%;
+            }
+
+            @include breakpoint(max-sm) {
+                width: 70%;
+            }
+
+            &::placeholder {
+                color: $text-color;
+            }
+        }
+
+        button {
+            position: absolute;
+            right: 35%;
+            top: 12px;
+
+            @include breakpoint(max-lg) {
+                right: 29%;
+                top: 6px;
+            }
+
+            @include breakpoint(max-md) {
+                right: 28%;
+                top: 3px;
+            }
+
+            @include breakpoint(max-sm) {
+                right: 16%;
+                top: 1px;
+            }
+
+            .icon {
+
+                i {
+                    font-size: 18px;
+                    color: $header-color;
+                }
+            }
+        }
+    }
+}
+
+.contact-wrapper-2 {
+
+    .contact-left-items {
+
+        .contact-info-area-2 {
+            padding: 40px;
+            background-color: $theme-color;
+
+            .contact-info-items {
+                @include flex;
+                gap: 20px;
+                position: relative;
+                padding-bottom: 20px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        
+                @include breakpoint (max-xl){
+                    flex-wrap: wrap;
+                }
+        
+                .icon {
+                    width: 65px;
+                    height: 65px;
+                    line-height: 65px;
+                    text-align: center;
+                    position: relative;
+        
+                    &::before {
+                        @include before;
+                        background-repeat: no-repeat;
+                        background-size: cover;
+                        background-image: url('../../assets/img/circle-3.png');
+                        animation: cir36 10s linear infinite;
+                    }
+                }
+        
+                .content {
+                    p {
+                        color: $white;
+                        margin-bottom: 5px;
+                    }
+        
+                    h3 {
+                        font-size: 24px;
+                        color: $white;
+        
+                        a {
+                            color: $white;
+                        }
+                    }
+                }
+
+                &.border-none {
+                    border: none !important;
+                }
+            }
+        }
+
+        .video-image {
+            position: relative;
+
+            img {
+                @include imgw;
+            }
+
+            .video-box {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%,-50%);
+                z-index: 9;
+        
+                .video-btn {
+                    display: inline-block;
+                    width: 60px;
+                    height: 60px;
+                    line-height: 60px;
+                    text-align: center;
+                    border-radius: 50%;
+                    color: $theme-color;
+                    background-color: $white;
+                }
+        
+                .ripple {
+                    &::before,&::after {
+                        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.8);
+                    }
+                }
+            }
+        }
+    }
+
+    .contact-content {
+        margin-left: 40px;
+
+        @include breakpoint (max-lg){
+            margin-left: 0;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+        }
+
+        .contact-form-items {
+            margin-top: 30px;
+
+            .form-clt {
+                span {
+                    color: $header-color;
+                    margin-bottom: 20px;
+                    display: inline-block;
+                }
+        
+                input,textarea {
+                    width: 100%;
+                    outline: none;
+                    border: none;
+                    background-color: transparent;
+                    border: 1px solid $border-color;
+                    color: $text-color;
+                    padding: 18px 20px;
+        
+                    @include breakpoint (max-md){
+                        padding: 14px 20px;
+                    }
+        
+                    @include breakpoint (max-sm){
+                        padding: 12px 18px;
+                    }
+        
+                    &::placeholder {
+                        color: $text-color;
+                    }
+                }
+        
+                textarea {
+                    padding-bottom: 150px;
+                }
+            }
+        }
+    }
+}
+
+.map-items {
+    .googpemap {
+        iframe {
+            width: 100%;
+            height: 600px;
+
+            @include breakpoint (max-sm){
+                height: 400px;
+            }
+        }
+    }
+}

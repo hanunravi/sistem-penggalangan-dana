@@ -1,0 +1,281 @@
+.service-image-items {
+    margin-top: 30px;
+
+    .service-image {
+
+        img {
+            @include imgw;
+        }
+    }
+
+    .service-content {
+        margin-top: 30px;
+
+        h3 {
+            @include breakpoint(max-xxl) {
+                font-size: 30px;
+            }
+        }
+
+        &.style-2 {
+            @include flex;
+            justify-content: space-between;
+
+            i {
+                color: $theme-color;
+                font-size: 20px;
+            }
+        }
+
+        h3 {
+
+            a {
+                color: $header-color;
+                @include transition;
+
+                i {
+                    margin-left: 10px;
+                    color: $theme-color;
+                    font-size: 20px;
+                }
+
+                &:hover {
+                    color: $theme-color;
+                }
+            }
+        }
+        .icon {
+
+            i {
+                font-size: 40px;
+            }
+        }
+    }
+}
+
+.service-section {
+    position: relative;
+
+    .swiper-dot {
+        margin-top: 50px;
+        margin-left: 4px;
+
+        .swiper-pagination-bullet {
+            width: 10px;
+            height: 10px;
+            transition: 0.6s;
+            background: $header-color;
+            opacity: 1;
+            border-radius: 10px;
+            &:not(:last-child){
+            margin-right: 10px;
+            }
+        }
+        .swiper-pagination-bullet.swiper-pagination-bullet-active {
+            
+            transition: 0.6s;
+            position: relative;
+    
+            &::before{
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            line-height: 22px;
+            top: -6px;
+            left: -6px;
+            border-radius: 50%;
+            background-color: transparent;
+            border: 1px solid $text-color;
+            content: "";
+            }
+        }
+    }
+
+    .shape-image {
+        position: absolute;
+        left: 0;
+        top: -174px;
+    }
+
+    .sevice-slider {
+        margin-right: -16%;
+        margin-bottom: 85px;
+
+        @include breakpoint (max-xl4){
+          margin-bottom: 0;
+        }
+
+        @include breakpoint (max-xl){
+            margin-right: 0;
+        }
+    }
+}
+
+.service-section-2 {
+
+    .container-fluid {
+        padding: 0 170px;
+
+        @include breakpoint(max-xxl) {
+            padding: 0 100px;
+        }
+
+        @include breakpoint(max-xl) {
+            padding: 0 100px;
+        }
+
+        @include breakpoint(max-lg) {
+            padding: 0 70px;
+        }
+
+        @include breakpoint(max-md) {
+            padding: 0 50px;
+        }
+
+        @include breakpoint(max-sm) {
+            padding: 0 20px;
+        }
+    }
+}
+
+.service-details-wrapper {
+
+    .details-image {
+        margin-bottom: 40px;
+
+        img {
+            @include imgw;
+        }
+    }
+
+    .service-deails-content {
+
+        h2 {
+            margin-bottom: 30px;
+        }
+
+        .details-list-area {
+            margin-top: 40px;
+
+            .list-items {
+                margin-bottom: 40px;
+
+                li {
+                    @include flex;
+
+                    i {
+                        font-size: 30px;
+                        color: $theme-color;
+                    }
+
+                    span {
+                        font-size: 30px;
+                        font-weight: 500;
+                        color: $header-color;
+                        font-family: $heading-font;
+                    }
+
+                    @include breakpoint(max-xl) {
+                        font-size: 22px;
+                    }
+
+                    @include breakpoint(max-lg) {
+                        font-size: 25px;
+                    }
+
+                    @include breakpoint(max-md) {
+                        font-size: 20px;
+                    }
+
+                    i {
+                        margin-right: 20px;
+                        color: $theme-color;
+                    }
+
+                    &:not(:last-child) {
+                        margin-bottom: 20px;
+                    }
+                }
+            }
+        }
+
+        .faq-content {
+            margin-top: 40px;
+
+            .accordion-item {
+                border: 0;
+        
+                .accordion-header { 
+                    .accordion-button { 
+                        font-weight: 500;
+                        color: $black;
+                        border: 0;
+                        border-radius: 0;
+                        box-shadow: none;
+                        background-color: transparent;
+                        text-transform: capitalize;
+                        font-size: 30px;
+                        padding: 30px 0;
+
+                        @include breakpoint(max-xl) {
+                            font-size: 22px;
+                        }
+    
+                        @include breakpoint(max-lg) {
+                            font-size: 25px;
+                        }
+    
+                        @include breakpoint(max-md) {
+                            font-size: 20px;
+                        }
+                        
+                        &::after {
+                            content: "\f068";
+                            background: transparent;
+                            font-family: $fa;
+                            font-weight: 300;
+                            transition: all 0.3s ease-in-out !important;
+                            color: $text-color;
+                            
+                        }
+    
+                        &:not(.collapsed)::after {
+                            content: "\f068";
+                            background: transparent;
+                            font-family: $fa;
+                            font-weight: 300;
+                           
+                        }
+        
+                        &.collapsed {
+                            background-color: transparent;
+                            color: $black;
+                            //border-bottom: none;
+                            border-bottom: 1px solid $border-color;
+                        }
+                      
+                    }
+                }
+        
+                .accordion-collapse { 
+        
+                    .accordion-body {
+                        padding-right: 50px;
+                        padding-left: 0;
+                       // padding-top: 15px;
+                        color: $black;
+                        background-color: transparent;
+                        padding-top: 0;
+                        border-bottom: 1px solid $border-color;
+                        padding-bottom: 30px;
+                        position: relative;
+        
+                        @include breakpoint (max-lg){
+                            padding-right: 30px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

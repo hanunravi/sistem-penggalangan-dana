@@ -1,0 +1,46 @@
+
+
+// .brand-items {
+//     margin-top: 30px;
+//     border: 1px solid $border-color;
+//     @include flex;
+//     justify-content: space-around;
+
+//     .brand-image {
+//         padding: 62px;
+//         min-height: 175px;
+//         &:not(:last-child) {
+//             border-right: 1px solid $border-color;
+//         }
+//     }
+// }
+
+.brand-box-items {
+    border: 1px solid $border-color;
+    @include flex;
+    justify-content: space-around;
+    margin-top: 30px;
+
+    @include breakpoint(max-lg) {
+        flex-wrap: wrap;
+    }
+
+    .single-brand-items {
+        flex-grow: 1;
+        padding: 60px 20px;
+        display: inline-block;
+        text-align: center;
+
+        @include breakpoint(max-xl) {
+           padding: 40px 15px;
+        }
+
+        &:not(:last-child) {
+            border-right: 1px solid $border-color;
+
+            @include breakpoint(max-lg) {
+                border-right: none;
+             }
+        }
+    }
+}

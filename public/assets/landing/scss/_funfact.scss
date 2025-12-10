@@ -1,0 +1,29 @@
+.funfact-items {
+    margin-top: 30px;
+    text-align: center;
+    
+    .content {
+
+        h2 {
+            font-size: 80px;
+            color: $white;
+            margin-bottom: 30px;
+
+            @include breakpoint(max-lg) {
+                font-size: 70px;
+             }
+
+            @include breakpoint(max-md) {
+                font-size: 60px;
+             }
+
+            @include breakpoint(max-sm) {
+                font-size: 50px;
+             }
+        }
+
+        p {
+            color: $white;
+        }
+    }
+}
