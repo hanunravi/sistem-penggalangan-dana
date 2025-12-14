@@ -1,0 +1,115 @@
+/* File: home-custom.css
+   Desc: CSS khusus untuk halaman Home (Popup TikTok, Tombol, dll)
+*/
+
+/* Agar Popup TikTok Rapi di Tengah */
+.white-popup-block {
+    background: #FFF;
+    padding: 20px;
+    text-align: center;
+    max-width: 400px; /* Ukuran Lebar Pas TikTok */
+    margin: 40px auto;
+    position: relative;
+    border-radius: 12px;
+}
+
+.tiktok-container {
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* Pastikan tombol play di tengah */
+.play-btn {
+    text-align: center;
+}
+
+/* Cursor pointer untuk tombol paket */
+.btn-paket {
+    cursor: pointer;
+}
+
+/* CSS KHUSUS HALAMAN HOME */
+
+/* --- Grid Kategori Donasi --- */
+.category-link {
+    text-decoration: none;
+    display: block;
+    height: 100%;
+}
+.category-box {
+    background: #fff;
+    padding: 30px 20px;
+    border-radius: 20px;
+    text-align: center;
+    border: 1px solid #f0f0f0;
+    height: 100%;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+
+/* Animasi Pop-Up Saat Hover */
+.category-box:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    border-color: transparent;
+}
+
+/* Styling Icon */
+.icon-wrapper {
+    width: 80px;
+    height: 80px;
+    line-height: 80px;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.category-box:hover .icon-wrapper {
+    transform: scale(1.1);
+}
+
+/* Warna Background Icon */
+.bg-danger-soft { background-color: rgba(220, 53, 69, 0.1); }
+.bg-primary-soft { background-color: rgba(13, 110, 253, 0.1); }
+.bg-warning-soft { background-color: rgba(255, 193, 7, 0.1); }
+.bg-success-soft { background-color: rgba(25, 135, 84, 0.1); }
+.bg-secondary-soft { background-color: rgba(108, 117, 125, 0.1); }
+.bg-info-soft { background-color: rgba(13, 202, 240, 0.1); }
+
+.category-box h5 {
+    font-weight: 700;
+    font-size: 18px;
+    color: #222;
+    margin-bottom: 0;
+    transition: color 0.3s;
+}
+
+.category-box:hover h5 {
+    color: #0d6efd;
+}
+
+/* --- Style Popup TikTok --- */
+.white-popup-block {
+    background: #FFF;
+    padding: 20px;
+    text-align: center;
+    max-width: 400px;
+    margin: 40px auto;
+    position: relative;
+    border-radius: 12px;
+}
+.tiktok-container {
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+}
+.play-btn {
+    text-align: center;
+}

@@ -146,3 +146,47 @@ a.meanmenu-reveal {
 .mean-remove {
     display: none !important
 }
+
+/* Top Header */
+.top-header {
+    background: #fff;
+    border-bottom: 1px solid #eee;
+}
+
+/* Navbar Area */
+.nav-area {
+    background: #000;
+}
+
+.nav-list {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    padding: 12px 0;
+    margin: 0;
+}
+
+.nav-list li a {
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: .3s;
+}
+
+.nav-list li a:hover {
+    background: #333;
+}
+
+/* Style tombol menu hitam (jika dipakai terpisah) */
+.menu-btn {
+    background: #000 !important;
+    color: #fff !important;
+    padding: 8px 14px !important;
+    border-radius: 6px !important;
+    transition: .3s !important;
+}
+
+.menu-btn:hover {
+    background: #333 !important;
+}

@@ -1,42 +1,44 @@
+<!-- Header Area Start -->
 <header class="header-area">
     <div class="container-fluid">
-        <div class="header-main-wrapper">
-            <div class="row align-items-center">
+        <!-- Wrapper utama -->
+        <div class="header-main-wrapper py-3">
+            
+            <!-- Flex container -->
+            <div class="d-flex align-items-center justify-content-between">
                 
-                <div class="col-xl-2 col-lg-2 col-md-4 col-6">
-                    <div class="header-logo">
-                        <a href="{{ url('/') }}">
-                            <img src="{{ asset('assets/landing/img/logo/black-logo.png') }}" alt="logo-img">
-                        </a>
-                    </div>
+                <!-- 1. LOGO -->
+                <div class="header-logo">
+                    <a href="{{ url('/') }}">
+                        <img src="{{ asset('assets/landing/img/logo/black-logo.png') }}" alt="logo-img">
+                    </a>
                 </div>
 
-                <div class="col-xl-10 col-lg-10 col-md-8 col-6">
-                    <div class="header-menu-wrapper d-flex align-items-center justify-content-end">
-                        
-                        <div class="main-menu d-none d-lg-block">
-                            <nav id="mobile-menu">
-                                <ul>
-                                    <li><a href="{{ url('/') }}">Beranda</a></li>
-                                    <li><a href="#">Cara Kerja</a></li>
-                                    <li><a href="#">Campaign</a></li>
-                                    <li><a href="#">Kontak</a></li>
-                                </ul>
-                            </nav>
-                        </div>
-
-                        <div class="header-right d-flex align-items-center">
-                            <div class="header-button d-none d-sm-block">
-                                <a href="#" class="theme-btn">Mulai Donasi</a>
-                            </div>
-                            <div class="header-bar d-lg-none">
-                                <span class="sidebar-toggle-btn">
-                                    <i class="fas fa-bars"></i>
-                                </span>
-                            </div>
-                        </div>
-
+                <!-- 2. AREA TOMBOL -->
+                <div class="header-right d-flex align-items-center">
+                    
+                    <!-- Tombol Admin (PERBAIKAN DI SINI) -->
+                    <!-- Arahkan ke route 'admin.login' agar tidak error redirect -->
+                    <div class="header-button d-none d-sm-block me-3">
+                        <a href="{{ route('admin.login') }}" class="theme-btn style-2">
+                            Admin
+                        </a>
                     </div>
+
+                    <!-- Tombol Mulai Donasi -->
+                    <div class="header-button d-none d-sm-block">
+                        <a href="{{ url('/donasi-manual') }}" class="theme-btn">
+                            Mulai Donasi
+                        </a>
+                    </div>
+
+                    <!-- Tombol Mobile -->
+                    <div class="header-bar d-lg-none ms-3">
+                        <span class="sidebar-toggle-btn">
+                            <i class="fas fa-bars"></i>
+                        </span>
+                    </div>
+
                 </div>
 
             </div>

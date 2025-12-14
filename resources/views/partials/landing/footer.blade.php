@@ -1,5 +1,5 @@
 <!-- Footer Section Start -->
-        <footer class="footer-section fix bg-cover" style="background-image: url('assets/img/Footer-bg.jpg');">
+        <footer class="footer-section fix bg-cover" style="background-image: url('assets/landing/img/Footer-bg.jpg');">
         <div class="container">
             <div class="footer-widget-wrapper">
                 <div class="row">
@@ -7,7 +7,7 @@
                         <div class="single-footer-widget">
                             <div class="widget-head">
                                 <a href="index.html">
-                                    <img src="assets/img/logo/white-logo.png" alt="logo-img">
+                                    <img src="assets/landing/img/logo/white-logo.png" alt="logo-img">
                                 </a>
                             </div>
                             <div class="footer-content">
@@ -98,7 +98,7 @@
             </div>
             <div class="footer-bottom style-2 wow fadeInUp" data-wow-delay=".3s">
                 <p>
-                    <a href="index.html">Copyright © 2025  by <span>Bizly.</span> All Rights Reserved. </a>
+                    <a href="home">Copyright © 2025  by <span>Bizly.</span> All Rights Reserved. </a>
                 </p>
             </div>
         </div>

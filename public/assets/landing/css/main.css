@@ -1166,7 +1166,7 @@ span {
   content: "";
   background-repeat: no-repeat;
   background-size: cover;
-  background-image: url("../../assets/img/circle-3.png");
+  background-image: url("../img/circle-3.png");
   animation: cir36 10s linear infinite;
 }
 .contact-wrapper-2 .contact-left-items .contact-info-area-2 .contact-info-items .content p {
@@ -1485,10 +1485,10 @@ span {
   position: relative;
 }
 .text-items .icon {
-  width: 212px;
-  height: 212px;
+  width: 65px;
+  height: 65px;
   background-color: var(--header);
-  line-height: 212px;
+  line-height: 70px;
   text-align: center;
   border-radius: 100px;
   position: absolute;
