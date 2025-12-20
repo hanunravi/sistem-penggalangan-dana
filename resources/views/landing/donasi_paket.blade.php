@@ -8,64 +8,65 @@
                 <div class="card border-0 shadow-lg" style="border-radius: 20px;">
                     <div class="card-header bg-primary text-white text-center py-4" style="border-radius: 20px 20px 0 0;">
                         <h3><i class="fas fa-box-open me-2"></i>Konfirmasi Paket Kebaikan</h3>
-                        <p class="mb-0">Terima kasih telah memilih untuk berbagi paket ini.</p>
+                        
+                        {{-- [PERUBAHAN 1] Menampilkan Info Campaign --}}
+                        @if(isset($campaign) && $campaign)
+                            <div class="mt-2 text-white" style="background: rgba(255,255,255,0.2); padding: 5px; border-radius: 10px;">
+                                <small>Untuk Program:</small><br>
+                                <strong>{{ $campaign->nama_campaign }}</strong>
+                            </div>
+                        @else
+                            <p class="mb-0">Terima kasih telah memilih untuk berbagi paket ini.</p>
+                        @endif
+
                     </div>
                     <div class="card-body p-5">
                         
-                        <form action="#" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('donasi.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
-                            <input type="hidden" name="jenis_donasi" value="paket">
+                            
+                            {{-- [PERUBAHAN 2] PENCEGAH ERROR (PENTING!) --}}
+                            @if(isset($campaign) && $campaign)
+                                <input type="hidden" name="campaign_id" value="{{ $campaign->id }}">
+                            @else
+                                <input type="hidden" name="campaign_id" value="0">
+                            @endif
 
-                            <!-- Detail Paket (Readonly) -->
+                            <input type="hidden" name="jenis_donasi" value="paket">
+                            <input type="hidden" name="nama_paket" value="{{ request('nama') }}">
+                            <input type="hidden" name="amount" value="{{ request('harga') }}">
+
                             <div class="text-center mb-5 p-4 bg-light rounded border border-primary border-opacity-25">
                                 <h5 class="text-muted mb-2">Anda Memilih:</h5>
                                 <h2 class="text-primary fw-bold mb-1">{{ request('nama') ?? 'Paket Kebaikan' }}</h2>
                                 <h3 class="text-dark">Rp {{ number_format(request('harga'), 0, ',', '.') }}</h3>
-                                
-                                {{-- Simpan data untuk dikirim ke backend --}}
-                                <input type="hidden" name="nama_paket" value="{{ request('nama') }}">
-                                <input type="hidden" name="amount" value="{{ request('harga') }}">
                             </div>
 
-                            <!-- Data Diri -->
                             <div class="mb-4">
                                 <label class="fw-bold mb-2">Nama Donatur</label>
-                                <input type="text" name="donatur_name" id="inputNama" class="form-control form-control-lg" placeholder="Nama Lengkap">
+                                <input type="text" name="donatur_name" id="inputNama" class="form-control form-control-lg" placeholder="Nama Lengkap" required>
+                                
                                 <div class="form-check mt-2">
-                                    <input class="form-check-input" type="checkbox" id="anonimCheck">
+                                    <input class="form-check-input" type="checkbox" name="is_anonymous" value="1" id="anonimCheck">
                                     <label class="form-check-label" for="anonimCheck">Sembunyikan nama saya (Hamba Allah)</label>
                                 </div>
                             </div>
 
-                       <!-- 2. Kategori Donasi (Auto Select) -->
+                            <div class="mb-4">
+                                <label class="fw-bold mb-2">Email (Opsional)</label>
+                                <input type="email" name="email" class="form-control form-control-lg" placeholder="Contoh: email@gmail.com">
+                            </div>
+
                             <div class="mb-4">
                                 <label class="fw-bold mb-2">Tujuan Donasi / Kategori</label>
-                                <select name="kategori_donasi" class="form-select form-select-lg" style="height: auto; padding: 12px 15px;" required>
+                                <select name="kategori_donasi" class="form-select form-select-lg" required>
                                     <option value="" selected disabled>-- Pilih Tujuan Donasi --</option>
-                                    
                                     <optgroup label="Kemanusiaan & Sosial">
                                         <option value="bencana_alam" {{ request('kategori') == 'bencana_alam' ? 'selected' : '' }}>🌋 Bencana Alam & Darurat</option>
                                         <option value="pangan_gizi" {{ request('kategori') == 'pangan_gizi' ? 'selected' : '' }}>🍚 Rice Bowl & Sembako (Pangan)</option>
                                         <option value="infrastruktur" {{ request('kategori') == 'infrastruktur' ? 'selected' : '' }}>🕌 Pembangunan Masjid & Infrastruktur</option>
                                         <option value="ekonomi" {{ request('kategori') == 'ekonomi' ? 'selected' : '' }}>💰 Pemberdayaan Ekonomi Dhuafa</option>
                                     </optgroup>
-
-                                    <optgroup label="Kesehatan & Pendidikan">
-                                        <option value="medis" {{ request('kategori') == 'medis' ? 'selected' : '' }}>🏥 Bantuan Medis & Kesehatan</option>
-                                        <option value="pendidikan" {{ request('kategori') == 'pendidikan' ? 'selected' : '' }}>🎓 Beasiswa & Pendidikan</option>
-                                        <option value="penelitian" {{ request('kategori') == 'penelitian' ? 'selected' : '' }}>🔬 Penelitian & Inovasi Sosial</option>
-                                    </optgroup>
-
-                                    <optgroup label="Lingkungan & Makhluk Hidup">
-                                        <option value="lingkungan" {{ request('kategori') == 'lingkungan' ? 'selected' : '' }}>🌳 Lingkungan Hidup (Penanaman Pohon)</option>
-                                        <option value="satwa" {{ request('kategori') == 'satwa' ? 'selected' : '' }}>🐾 Konservasi Satwa & Shelter Hewan</option>
-                                    </optgroup>
-
-                                    <optgroup label="Kreatif & Profesi">
-                                        <option value="seni_kreatif" {{ request('kategori') == 'seni_kreatif' ? 'selected' : '' }}>🎨 Seni, Film & Proyek Kreatif</option>
-                                        <option value="guru_honorer" {{ request('kategori') == 'guru_honorer' ? 'selected' : '' }}>👨‍🏫 Dukungan Guru Honorer</option>
-                                    </optgroup>
-                                    
                                     <option value="lainnya" {{ request('kategori') == 'lainnya' ? 'selected' : '' }}>❤️ Donasi Umum Lainnya</option>
                                 </select>
                             </div>
@@ -75,7 +76,6 @@
                                 <textarea name="message" class="form-control" rows="3" placeholder="Tulis pesan semangat atau doa..."></textarea>
                             </div>
 
-                            <!-- Info Transfer -->
                             <div class="alert alert-warning d-flex align-items-center mb-4">
                                 <i class="fas fa-wallet fa-2x me-3"></i>
                                 <div>
@@ -85,7 +85,6 @@
                                 </div>
                             </div>
 
-                            <!-- Upload Bukti -->
                             <div class="mb-4">
                                 <label class="fw-bold mb-2">Upload Bukti Transfer</label>
                                 <input type="file" name="payment_proof" class="form-control form-control-lg" accept="image/*" required>
@@ -103,6 +102,7 @@
         </div>
     </div>
 </section>
+
 
 @push('scripts')
 <script>

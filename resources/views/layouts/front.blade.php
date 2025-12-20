@@ -54,7 +54,42 @@
     {{-- 5. SCRIPT JS --}}
     @include('partials.landing.script')
 
-   
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Cek Session SUKSES
+        @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Alhamdulillah!',
+                text: "{{ session('success') }}",
+                confirmButtonColor: '#198754',
+                timer: 4000
+            });
+        @endif
+
+        // Cek Session ERROR
+        @if(session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: "{{ session('error') }}",
+                confirmButtonColor: '#d33'
+            });
+        @endif
+        
+        // Cek Error Validasi (Form kosong dll)
+        @if($errors->any())
+            Swal.fire({
+                icon: 'warning',
+                title: 'Perhatian',
+                html: '<ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>',
+                confirmButtonColor: '#ffc107'
+            });
+        @endif
+    });
+</script>
 
 </body>
 </html>

@@ -416,9 +416,27 @@
         <div class="container-fluid">
             <div class="swiper project-slider">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide"><div class="project-card-items-2"><div class="project-image"><img src="{{ asset('assets/landing/img/project/01.jpg') }}" alt="img"><div class="project-content"><h4><a href="#">Banjir Demak</a></h4><a href="#" class="icon"><i class="fa-light fa-arrow-right-long"></i></a></div></div></div></div>
-                    <div class="swiper-slide"><div class="project-card-items-2"><div class="project-image"><img src="{{ asset('assets/landing/img/project/02.jpg') }}" alt="img"><div class="project-content"><h4><a href="#">Gempa Cianjur</a></h4><a href="#" class="icon"><i class="fa-light fa-arrow-right-long"></i></a></div></div></div></div>
-                    <div class="swiper-slide"><div class="project-card-items-2"><div class="project-image"><img src="{{ asset('assets/landing/img/project/03.jpg') }}" alt="img"><div class="project-content"><h4><a href="#">Erupsi Ruang</a></h4><a href="#" class="icon"><i class="fa-light fa-arrow-right-long"></i></a></div></div></div></div>
+                    @forelse($campaigns as $cp)
+                    <div class="swiper-slide">
+                        <div class="project-card-items-2">
+                            <div class="project-image">
+                                <img src="{{ asset('storage/' . $cp->image) }}" alt="{{ $cp->title }}" style="height: 350px; width: 100%; object-fit: cover;">
+                                
+                                <div class="project-content">
+                                    <h4><a href="{{ route('campaign.show', $cp->id) }}">{{ $cp->title }}</a></h4>
+                                    
+                                    <a href="{{ route('campaign.show', $cp->id) }}" class="icon">
+                                        <i class="fa-light fa-arrow-right-long"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @empty
+                    <div class="text-center w-100">
+                        <p>Belum ada campaign aktif saat ini.</p>
+                    </div>
+                    @endforelse
                 </div>
             </div>
         </div>
@@ -426,24 +444,61 @@
 
     {{-- 9. MARQUEE --}}
     <div class="marquee-section fix pt-5">
-        <div class="mycustom-marque"><div class="scrolling-wrap gap-100"><div class="comm"><div class="cmn-textslide textitalick text-custom-storke">Mari Berbagi</div><div class="cmn-textslide textitalick text-custom-storke">Peduli Sesama</div><div class="cmn-textslide textitalick text-custom-storke">Pulihkan Harapan</div></div></div></div>
+        <div class="mycustom-marque">
+            <div class="scrolling-wrap gap-100">
+                <div class="comm">
+                    <div class="cmn-textslide textitalick text-custom-storke">Mari Berbagi</div>
+                    <div class="cmn-textslide textitalick text-custom-storke">Peduli Sesama</div>
+                    <div class="cmn-textslide textitalick text-custom-storke">Pulihkan Harapan</div>
+                </div>
+            </div>
+        </div>
     </div>
 
     {{-- 10. NEWS --}}
     <section class="news-section section-padding fix">
         <div class="container">
-            <div class="section-title text-center"><span class="wow fadeInUp">Kabar Lapangan</span><h2 class="wow fadeInUp">Update Terbaru</h2></div>
+            <div class="section-title text-center">
+                <span class="wow fadeInUp">Kabar Lapangan</span>
+                <h2 class="wow fadeInUp">Update Terbaru</h2>
+            </div>
+            
             <div class="row">
-                <div class="col-xl-4 col-lg-6 col-md-6"><div class="news-box-items"><div class="news-image"><img src="{{ asset('assets/landing/img/news/01.jpg') }}" alt="img"></div><div class="news-content"><h4><a href="#">Distribusi Sembako</a></h4><a href="#" class="link-btn">Baca</a></div></div></div>
-                <div class="col-xl-4 col-lg-6 col-md-6"><div class="news-box-items"><div class="news-image"><img src="{{ asset('assets/landing/img/news/02.jpg') }}" alt="img"></div><div class="news-content"><h4><a href="#">Trauma Healing Anak</a></h4><a href="#" class="link-btn">Baca</a></div></div></div>
-                <div class="col-xl-4 col-lg-6 col-md-6"><div class="news-box-items"><div class="news-image"><img src="{{ asset('assets/landing/img/news/03.jpg') }}" alt="img"></div><div class="news-content"><h4><a href="#">Laporan Keuangan</a></h4><a href="#" class="link-btn">Baca</a></div></div></div>
+                {{-- Mulai Loop Data Post --}}
+                @forelse($posts as $post)
+                <div class="col-xl-4 col-lg-6 col-md-6">
+                    <div class="news-box-items">
+                        <div class="news-image">
+                            {{-- Gambar Dinamis --}}
+                            <img src="{{ asset('storage/'.$post->image) }}" alt="{{ $post->title }}" style="height: 250px; object-fit: cover; width: 100%;">
+                        </div>
+                        <div class="news-content">
+                            {{-- Judul Dinamis dengan Link ke Detail --}}
+                            <h4>
+                                <a href="{{ route('kabar.show', $post->slug) }}">
+                                    {{ Str::limit($post->title, 40) }}
+                                </a>
+                            </h4>
+                            
+                            {{-- Tombol Baca --}}
+                            <a href="{{ route('kabar.show', $post->slug) }}" class="link-btn">Baca</a>
+                        </div>
+                    </div>
+                </div>
+                @empty
+                {{-- Tampilan Jika Belum Ada Berita --}}
+                <div class="col-12 text-center">
+                    <p>Belum ada kabar terbaru saat ini.</p>
+                </div>
+                @endforelse
+                {{-- Selesai Loop --}}
             </div>
         </div>
     </section>
 
     {{-- 11. FOOTER CTA --}}
     <section class="strock-text section-padding fix pt-0">
-        <div class="container"><div class="row"><div class="col-xl-12 text-center"><div class="text-items" style="padding: 30px 0;"><a href="{{ url('/donasi-manual') }}" class="icon" style="display: inline-block; margin-bottom: 15px;"><i class="fa-solid fa-paper-plane"></i></a><h2 style="font-size: 2rem; margin: 15px 0;">Mulai Donasi</h2></div></div></div></div>
+        <div class="container"><div class="row"><div class="col-xl-12 text-center"><div class="text-items" style="padding: 30px 0;"><a href="{{ url('/donasi-manual') }}" ></a><h2 style="font-size: 2rem; margin: 15px 0;">Mulai Donasi</h2></div></div></div></div>
     </section>
 
 @endsection

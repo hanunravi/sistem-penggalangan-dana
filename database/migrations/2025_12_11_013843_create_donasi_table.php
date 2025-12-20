@@ -11,25 +11,33 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('donations', function (Blueprint $table) {
+        Schema::create('donasis', function (Blueprint $table) {
             $table->id();
             
+            // Relasi ke Campaign (Tipe BigInt Unsigned)
+            $table->unsignedBigInteger('campaign_id');
+            $table->foreign('campaign_id')->references('id')->on('campaigns')->onDelete('cascade');
+
+            // Relasi ke User (BigInt Unsigned - Opsional jika donatur login)
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+
             // Data Donatur
-            $table->string('donatur_name')->nullable(); // Bisa kosong jika 'Hamba Allah'
-            $table->string('email')->nullable(); // Opsional untuk kirim notif
-            $table->boolean('is_anonymous')->default(false); // Ceklis Hamba Allah
+            $table->string('donatur_name')->nullable(); 
+            $table->string('email')->nullable(); 
+            $table->boolean('is_anonymous')->default(false); 
             
             // Detail Donasi
-            $table->enum('jenis_donasi', ['manual', 'paket'])->default('manual'); // Pembeda
-            $table->string('kategori_donasi')->nullable(); // medis, pendidikan, bencana, dll
-            $table->string('nama_paket')->nullable(); // Jika pilih paket (Misal: Paket Pangan)
-            $table->decimal('amount', 15, 0); // Jumlah uang (15 digit, 0 desimal)
+            $table->enum('jenis_donasi', ['manual', 'paket'])->default('manual');
+            $table->string('kategori_donasi')->nullable(); 
+            $table->string('nama_paket')->nullable(); 
+            $table->decimal('amount', 15, 0); 
             
             // Pesan & Bukti
             $table->text('message')->nullable();
-            $table->string('payment_proof')->nullable(); // Path foto bukti transfer
+            $table->string('payment_proof')->nullable(); 
             
-            // Status (Penting untuk Admin)
+            // Status
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             
             $table->timestamps();
