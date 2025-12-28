@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Campaign;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str; 
 
 class CampaignController extends Controller
 {
@@ -22,70 +23,80 @@ class CampaignController extends Controller
 
     // Simpan Data ke Database
     public function store(Request $request) {
+        // 1. VALIDASI (Sesuaikan dengan name="" di Form HTML)
         $request->validate([
-            'title' => 'required',
-            'target_dana' => 'required|numeric',
-            'image' => 'required|image|mimes:jpg,png,jpeg|max:2048',
+            'title'       => 'required|string|max:255',
+            'target_dana' => 'required|numeric', // Di Form namanya target_dana
+            'image'       => 'required|image|mimes:jpg,png,jpeg|max:2048',
             'description' => 'required'
+            // Slug, status, current_amount TIDAK perlu divalidasi karena kita generate sendiri
         ]);
 
-        // Proses Upload Foto
+        // 2. Proses Upload Foto
         $path = $request->file('image')->store('campaigns', 'public');
 
+        // 3. Simpan ke Database
         Campaign::create([
-            'title' => $request->title,
-            'target_dana' => $request->target_dana,
-            'description' => $request->description,
-            'image' => $path,
+            'title'          => $request->title,
+            'slug'           => Str::slug($request->title), // Generate otomatis
+            'target_amount'  => $request->target_dana,      // Pindahkan target_dana ke target_amount
+            'current_amount' => 0,                          // Default 0
+            'description'    => $request->description,
+            'image'          => $path,
+            'status'         => 'active',                   // Default active
         ]);
 
         return redirect()->route('admin.campaign.index')->with('success', 'Campaign Berhasil Dibuat!');
     }
+
+    // Hapus Campaign
     public function destroy($id)
     {
-        // 1. Cari data campaign berdasarkan ID
         $campaign = Campaign::findOrFail($id);
 
-        // 2. Hapus File Gambar dari folder storage (agar server tidak penuh sampah)
         if ($campaign->image) {
             Storage::disk('public')->delete($campaign->image);
         }
 
-        // 3. Hapus data dari database
         $campaign->delete();
 
-        // 4. Kembali ke halaman index dengan pesan sukses
         return redirect()->route('admin.campaign.index')->with('success', 'Campaign berhasil dihapus!');
     }
-        public function edit($id)
+
+    // Halaman Edit
+    public function edit($id)
     {
-        // Ambil data campaign berdasarkan ID
-        $campaign = \App\Models\Campaign::findOrFail($id);
-        
-        // Kirim data ke view edit
+        $campaign = Campaign::findOrFail($id);
         return view('admin.campaign.edit', compact('campaign'));
     }
 
+    // Proses Update
     public function update(Request $request, $id)
     {
-        $campaign = \App\Models\Campaign::findOrFail($id);
+        $campaign = Campaign::findOrFail($id);
 
-        // 1. Validasi
+        // 1. Validasi Update
         $request->validate([
             'title'       => 'required|string|max:255',
             'target_dana' => 'required|numeric',
             'description' => 'required',
-            'image'       => 'nullable|image|mimes:jpeg,png,jpg|max:2048', 
+            'image'       => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Image boleh kosong pas update
         ]);
-        if ($request->hasFile('image')) {           
+
+        // 2. Cek Gambar Baru
+        if ($request->hasFile('image')) {          
+            if ($campaign->image) {
+                Storage::disk('public')->delete($campaign->image);
+            }
             $path = $request->file('image')->store('campaigns', 'public');                    
             $campaign->image = $path;
         }
 
-        // 3. Update data lainnya
-        $campaign->title = $request->title;
-        $campaign->target_dana = $request->target_dana;
-        $campaign->description = $request->description; 
+        // 3. Update Data
+        $campaign->title         = $request->title;
+        $campaign->slug          = Str::slug($request->title); 
+        $campaign->target_amount = $request->target_dana; // Map target_dana -> target_amount
+        $campaign->description   = $request->description; 
         
         $campaign->save();
 

@@ -127,48 +127,65 @@
          (Update agar angkanya dinamis juga)
     =============================================== --}}
     <section class="funfact-section section-padding fix header-bg">
-        <div class="container">
-            <div class="section-title text-center mb-5">
-                <h2 class="text-white wow fadeInUp">Update Terkini</h2>
+    <div class="container">
+        <div class="section-title text-center mb-5">
+            <h2 class="text-white wow fadeInUp">Update Terkini</h2>
+        </div>
+        <div class="row">
+            {{-- Item 1: Total Uang --}}
+            <div class="col-xl-3 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".2s">
+                <div class="funfact-items">
+                    <div class="icon"><img src="{{ asset('assets/landing/img/icon/05.svg') }}" alt="icon"></div>
+                    <div class="content">
+                        {{-- PERBAIKAN: Gunakan format angka standar (titik untuk desimal, tanpa ribuan) agar animasi JS lancar --}}
+                        @if($totalUang >= 1000000)
+                            {{-- Contoh output: 1.5 (Jt) --}}
+                            <h2>Rp <span class="count">{{ number_format($totalUang / 1000000, 1, '.', '') }}</span>Jt</h2>
+                        @else
+                            {{-- Contoh output: 500000 (Tanpa titik ribuan di dalam span count) --}}
+                            <h2>Rp <span class="count">{{ $totalUang }}</span></h2>
+                        @endif
+                        <p>Dana Terkumpul</p>
+                    </div>
+                </div>
             </div>
-            <div class="row">
-                {{-- Item 1: Total Uang --}}
-                <div class="col-xl-3 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".2s">
-                    <div class="funfact-items">
-                        <div class="icon"><img src="{{ asset('assets/landing/img/icon/05.svg') }}" alt="icon"></div>
-                        <div class="content">
-                            {{-- Format Juta/Miliar simpel --}}
-                            <h2>Rp <span class="count">{{ number_format($totalUang / 1000000, 0) }}</span>Jt</h2>
-                            <p>Dana Terkumpul</p>
-                        </div>
+
+            {{-- Item 2: Total Donatur --}}
+            <div class="col-xl-3 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".4s">
+                <div class="funfact-items">
+                    <div class="icon"><img src="{{ asset('assets/landing/img/icon/06.svg') }}" alt="icon"></div>
+                    <div class="content">
+                        {{-- PERBAIKAN: Hapus number_format agar jadi angka murni --}}
+                        <h2><span class="count">{{ $totalDonatur }}</span>+</h2>
+                        <p>Orang Baik</p>
                     </div>
                 </div>
-                {{-- Item 2: Total Donatur --}}
-                <div class="col-xl-3 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".4s">
-                    <div class="funfact-items">
-                        <div class="icon"><img src="{{ asset('assets/landing/img/icon/06.svg') }}" alt="icon"></div>
-                        <div class="content">
-                            <h2><span class="count">{{ $totalDonatur }}</span>+</h2>
-                            <p>Orang Baik</p>
-                        </div>
+            </div>
+
+            {{-- Item 3: Program Aktif --}}
+            <div class="col-xl-3 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".6s">
+                <div class="funfact-items">
+                    <div class="icon"><img src="{{ asset('assets/landing/img/icon/07.svg') }}" alt="icon"></div>
+                    <div class="content">
+                        <h2><span class="count">{{ $campaigns->count() }}</span></h2>
+                        <p>Program Kebaikan</p>
                     </div>
                 </div>
-                {{-- Sisanya boleh statis dulu atau dihitung logic lain --}}
-                <div class="col-xl-3 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".6s">
-                    <div class="funfact-items">
-                        <div class="icon"><img src="{{ asset('assets/landing/img/icon/07.svg') }}" alt="icon"></div>
-                        <div class="content"><h2><span class="count">15</span></h2><p>Titik Bencana</p></div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".8s">
-                    <div class="funfact-items">
-                        <div class="icon"><img src="{{ asset('assets/landing/img/icon/08.svg') }}" alt="icon"></div>
-                        <div class="content"><h2><span class="count">5</span>rb+</h2><p>Paket Tersalurkan</p></div>
+            </div>
+
+            {{-- Item 4: Aksi Kebaikan --}}
+            <div class="col-xl-3 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".8s">
+                <div class="funfact-items">
+                    <div class="icon"><img src="{{ asset('assets/landing/img/icon/08.svg') }}" alt="icon"></div>
+                    <div class="content">
+                        <h2><span class="count">{{ $totalDonatur }}</span>+</h2>
+                        <p>Aksi Kebaikan</p>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
     {{-- ==============================================
          4. DONATUR TERBARU (Data Real dari DB)
@@ -239,118 +256,151 @@
          6. PAKET DONASI (5 Kategori Pilihan)
          Sudah terintegrasi otomatis dengan halaman donasi-paket
     =============================================== -->
-    <section id="pilihan-donasi" class="pricing-section section-padding fix">
-        <div class="container">
-            <div class="section-title text-center">
-                <span class="wow fadeInUp">Pilihan Kebaikan</span>
-                <h2 class="wow fadeInUp" data-wow-delay=".3s">Pilih Paket Sesuai <br> Kategori Pilihanmu</h2>
-            </div>
-            
-            <div class="row justify-content-center">
-                
-                {{-- 1. PAKET PANGAN (Rp 50.000) --}}
-                <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".2s">
-                    <div class="pricing-card-items">
-                        <div class="pricing-header">
-                            <div class="post-cart">Paket Pangan</div>
-                            <div class="pricing-date"><h2>Rp 50rb</h2></div>
-                            <p>Berbagi makanan jumat berkah & sembako.</p>
-                        </div>
-                        <ul class="pricing-list">
-                            <li><i class="fas fa-utensils text-primary"></i> Nasi Box Bergizi</li>
-                            <li><i class="fas fa-box-open text-primary"></i> Sembako Dhuafa</li>
-                            <li><i class="fas fa-check-circle text-primary"></i> Penyaluran Jumat</li>
-                        </ul>
-                        <div class="pricing-btn">
-                            {{-- Link dengan Kategori PANGAN --}}
-                            <a href="{{ url('/donasi-paket?nama=Paket Pangan&harga=50000&kategori=pangan_gizi') }}" class="theme-btn border-0 w-100">Pilih Paket Ini</a>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- 2. PAKET SEHAT / MEDIS (Rp 100.000) --}}
-                <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".3s">
-                    <div class="pricing-card-items active-color">
-                        <div class="pricing-header">
-                            <div class="post-cart bg-color">Paket Sehat</div>
-                            <div class="pricing-date style-2"><h2>Rp 100rb</h2></div>
-                            <p>Bantuan medis untuk pasien kurang mampu.</p>
-                        </div>
-                        <ul class="pricing-list style-2">
-                            <li><i class="fas fa-pills text-white"></i> Obat & Vitamin</li>
-                            <li><i class="fas fa-user-md text-white"></i> Biaya Rawat Jalan</li>
-                            <li><i class="fas fa-check-circle text-white"></i> Pendampingan Pasien</li>
-                        </ul>
-                        <div class="pricing-btn style-2">
-                            {{-- Link dengan Kategori MEDIS --}}
-                            <a href="{{ url('/donasi-paket?nama=Paket Sehat Medis&harga=100000&kategori=medis') }}" class="theme-btn border-0 w-100">Pilih Paket Ini</a>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- 3. PAKET CERDAS / PENDIDIKAN (Rp 150.000) --}}
-                <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".4s">
-                    <div class="pricing-card-items">
-                        <div class="pricing-header">
-                            <div class="post-cart">Paket Cerdas</div>
-                            <div class="pricing-date"><h2>Rp 150rb</h2></div>
-                            <p>Dukungan pendidikan anak yatim & dhuafa.</p>
-                        </div>
-                        <ul class="pricing-list">
-                            <li><i class="fas fa-book text-primary"></i> Alat Tulis & Buku</li>
-                            <li><i class="fas fa-tshirt text-primary"></i> Seragam Sekolah</li>
-                            <li><i class="fas fa-check-circle text-primary"></i> Beasiswa Bulanan</li>
-                        </ul>
-                        <div class="pricing-btn">
-                            {{-- Link dengan Kategori PENDIDIKAN --}}
-                            <a href="{{ url('/donasi-paket?nama=Paket Pendidikan Cerdas&harga=150000&kategori=pendidikan') }}" class="theme-btn border-0 w-100">Pilih Paket Ini</a>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- 4. PAKET TANGGAP / BENCANA (Rp 200.000) --}}
-                <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".5s">
-                    <div class="pricing-card-items">
-                        <div class="pricing-header">
-                            <div class="post-cart">Paket Tanggap</div>
-                            <div class="pricing-date"><h2>Rp 200rb</h2></div>
-                            <p>Logistik darurat untuk korban bencana alam.</p>
-                        </div>
-                        <ul class="pricing-list">
-                            <li><i class="fas fa-campground text-primary"></i> Tenda & Selimut</li>
-                            <li><i class="fas fa-first-aid text-primary"></i> P3K & Makanan Bayi</li>
-                            <li><i class="fas fa-check-circle text-primary"></i> Dapur Umum</li>
-                        </ul>
-                        <div class="pricing-btn">
-                            {{-- Link dengan Kategori BENCANA --}}
-                            <a href="{{ url('/donasi-paket?nama=Paket Tanggap Bencana&harga=200000&kategori=bencana_alam') }}" class="theme-btn border-0 w-100">Pilih Paket Ini</a>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- 5. PAKET LESTARI / LINGKUNGAN (Rp 75.000) --}}
-                <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".6s">
-                    <div class="pricing-card-items">
-                        <div class="pricing-header">
-                            <div class="post-cart">Paket Lestari</div>
-                            <div class="pricing-date"><h2>Rp 75rb</h2></div>
-                            <p>Menjaga bumi dan menyayangi satwa.</p>
-                        </div>
-                        <ul class="pricing-list">
-                            <li><i class="fas fa-tree text-primary"></i> 5 Bibit Pohon</li>
-                            <li><i class="fas fa-paw text-primary"></i> Pakan Kucing Jalanan</li>
-                            <li><i class="fas fa-check-circle text-primary"></i> Aksi Bersih Sampah</li>
-                        </ul>
-                        <div class="pricing-btn">
-                            {{-- Link dengan Kategori LINGKUNGAN --}}
-                            <a href="{{ url('/donasi-paket?nama=Paket Lestari Lingkungan&harga=75000&kategori=lingkungan') }}" class="theme-btn border-0 w-100">Pilih Paket Ini</a>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+    <section class="pricing-section section-padding">
+    <div class="container">
+        <div class="section-title text-center">
+            <span class="sub-content wow fadeInUp">Pilihan Kebaikan</span>
+            <h2 class="wow fadeInUp" data-wow-delay=".3s">Paket Donasi Pilihan</h2>
         </div>
-    </section>
+        
+        <div class="row">
+            
+            {{-- 1. PAKET SEMBAKO / PANGAN (Rp 150.000) --}}
+            <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".2s">
+                <div class="pricing-card-items">
+                    <div class="pricing-header">
+                        <div class="post-cart">Paket Kenyang</div>
+                        <div class="pricing-date"><h2>Rp 150rb</h2></div>
+                        <p>Berbagi nasi kotak & sembako untuk dhuafa.</p>
+                    </div>
+                    <ul class="pricing-list">
+                        <li><i class="fas fa-utensils text-primary"></i> Nasi Kotak Jumat</li>
+                        <li><i class="fas fa-box text-primary"></i> Sembako Bulanan</li>
+                        <li><i class="fas fa-check-circle text-primary"></i> Penyaluran Tepat Sasaran</li>
+                    </ul>
+                    <div class="pricing-btn">
+                        {{-- Link ke PANGAN --}}
+                        <a href="{{ url('/donasi-paket?nama=Paket Kenyang Sembako&harga=150000&kategori=pangan_gizi') }}" class="theme-btn border-0 w-100">
+                            Pilih Paket Ini
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            {{-- 2. PAKET SEHAT / MEDIS (Rp 100.000) --}}
+            <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".3s">
+                <div class="pricing-card-items active-color">
+                    <div class="pricing-header">
+                        <div class="post-cart bg-color">Paket Sehat</div>
+                        <div class="pricing-date style-2"><h2>Rp 100rb</h2></div>
+                        <p>Bantuan medis untuk pasien kurang mampu.</p>
+                    </div>
+                    <ul class="pricing-list style-2">
+                        <li><i class="fas fa-pills text-white"></i> Obat & Vitamin</li>
+                        <li><i class="fas fa-user-md text-white"></i> Biaya Rawat Jalan</li>
+                        <li><i class="fas fa-check-circle text-white"></i> Pendampingan Pasien</li>
+                    </ul>
+                    <div class="pricing-btn style-2">
+                        {{-- Link ke MEDIS --}}
+                        <a href="{{ url('/donasi-paket?nama=Paket Sehat Medis&harga=100000&kategori=medis') }}" class="theme-btn border-0 w-100">
+                            Pilih Paket Ini
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            {{-- 3. PAKET CERDAS / PENDIDIKAN (Rp 150.000) --}}
+            <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".4s">
+                <div class="pricing-card-items">
+                    <div class="pricing-header">
+                        <div class="post-cart">Paket Cerdas</div>
+                        <div class="pricing-date"><h2>Rp 150rb</h2></div>
+                        <p>Dukungan pendidikan anak yatim & dhuafa.</p>
+                    </div>
+                    <ul class="pricing-list">
+                        <li><i class="fas fa-book text-primary"></i> Alat Tulis & Buku</li>
+                        <li><i class="fas fa-tshirt text-primary"></i> Seragam Sekolah</li>
+                        <li><i class="fas fa-check-circle text-primary"></i> Beasiswa Bulanan</li>
+                    </ul>
+                    <div class="pricing-btn">
+                        {{-- Link ke PENDIDIKAN --}}
+                        <a href="{{ url('/donasi-paket?nama=Paket Pendidikan Cerdas&harga=150000&kategori=pendidikan') }}" class="theme-btn border-0 w-100">
+                            Pilih Paket Ini
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            {{-- 4. PAKET TANGGAP / BENCANA (Rp 200.000) --}}
+            <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".5s">
+                <div class="pricing-card-items">
+                    <div class="pricing-header">
+                        <div class="post-cart">Paket Tanggap</div>
+                        <div class="pricing-date"><h2>Rp 200rb</h2></div>
+                        <p>Logistik darurat untuk korban bencana alam.</p>
+                    </div>
+                    <ul class="pricing-list">
+                        <li><i class="fas fa-campground text-primary"></i> Tenda & Selimut</li>
+                        <li><i class="fas fa-first-aid text-primary"></i> P3K & Makanan Bayi</li>
+                        <li><i class="fas fa-check-circle text-primary"></i> Dapur Umum</li>
+                    </ul>
+                    <div class="pricing-btn">
+                        {{-- Link ke BENCANA --}}
+                        <a href="{{ url('/donasi-paket?nama=Paket Tanggap Bencana&harga=200000&kategori=bencana_alam') }}" class="theme-btn border-0 w-100">
+                            Pilih Paket Ini
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            {{-- 5. PAKET LESTARI / LINGKUNGAN (Rp 75.000) --}}
+            <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".6s">
+                <div class="pricing-card-items">
+                    <div class="pricing-header">
+                        <div class="post-cart">Paket Lestari</div>
+                        <div class="pricing-date"><h2>Rp 75rb</h2></div>
+                        <p>Menjaga bumi dan menyayangi satwa.</p>
+                    </div>
+                    <ul class="pricing-list">
+                        <li><i class="fas fa-tree text-primary"></i> 5 Bibit Pohon</li>
+                        <li><i class="fas fa-paw text-primary"></i> Pakan Kucing Jalanan</li>
+                        <li><i class="fas fa-check-circle text-primary"></i> Aksi Bersih Sampah</li>
+                    </ul>
+                    <div class="pricing-btn">
+                        {{-- Link ke LINGKUNGAN --}}
+                        <a href="{{ url('/donasi-paket?nama=Paket Lestari Lingkungan&harga=75000&kategori=lingkungan') }}" class="theme-btn border-0 w-100">
+                            Pilih Paket Ini
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            {{-- 6. PAKET MASJID / INFRASTRUKTUR (Rp 300.000) --}}
+            <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".7s">
+                <div class="pricing-card-items">
+                    <div class="pricing-header">
+                        <div class="post-cart">Paket Ibadah</div>
+                        <div class="pricing-date"><h2>Rp 300rb</h2></div>
+                        <p>Renovasi dan pemeliharaan rumah ibadah.</p>
+                    </div>
+                    <ul class="pricing-list">
+                        <li><i class="fas fa-mosque text-primary"></i> Perbaikan Bangunan</li>
+                        <li><i class="fas fa-hammer text-primary"></i> Material Konstruksi</li>
+                        <li><i class="fas fa-check-circle text-primary"></i> Perawatan Fasilitas</li>
+                    </ul>
+                    <div class="pricing-btn">
+                        {{-- Link ke INFRASTRUKTUR --}}
+                        <a href="{{ url('/donasi-paket?nama=Paket Masjid Infrastruktur&harga=300000&kategori=infrastruktur') }}" class="theme-btn border-0 w-100">
+                            Pilih Paket Ini
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
 
     {{-- ==============================================
          7. TRANSPARANSI / STATISTIK (Dynamic Data)
@@ -419,26 +469,38 @@
                     @forelse($campaigns as $cp)
                     <div class="swiper-slide">
                         <div class="project-card-items-2">
-                            <div class="project-image">
+                            <div class="project-image" style="position: relative;">
+                                {{-- Gambar --}}
                                 <img src="{{ asset('storage/' . $cp->image) }}" alt="{{ $cp->title }}" style="height: 350px; width: 100%; object-fit: cover;">
                                 
-                                <div class="project-content">
-                                    <h4><a href="{{ route('campaign.show', $cp->id) }}">{{ $cp->title }}</a></h4>
+                                {{-- Overlay Content --}}
+                                <div class="project-content" style="position: absolute; bottom: 20px; left: 20px; right: 20px; z-index: 99;">
                                     
-                                    <a href="{{ route('campaign.show', $cp->id) }}" class="icon">
+                                    {{-- Judul (Diberi z-index tinggi biar bisa diklik) --}}
+                                    <h4 style="position: relative; z-index: 100;">
+                                        <a href="{{ route('campaign.show', $cp->id) }}" class="text-white stretched-link">
+                                            {{ $cp->title }}
+                                        </a>
+                                    </h4>
+                                    
+                                    {{-- Tombol Panah --}}
+                                    <a href="{{ route('campaign.show', $cp->id) }}" class="icon" style="position: relative; z-index: 101;">
                                         <i class="fa-light fa-arrow-right-long"></i>
                                     </a>
                                 </div>
+                                
+                                {{-- Opsional: Link Pembungkus Transparan (Agar seluruh kotak bisa diklik) --}}
+                                <a href="{{ route('campaign.show', $cp->id) }}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 50;"></a>
                             </div>
                         </div>
                     </div>
                     @empty
-                    <div class="text-center w-100">
+                    <div class="col-12 text-center">
                         <p>Belum ada campaign aktif saat ini.</p>
                     </div>
                     @endforelse
+                    </div>
                 </div>
-            </div>
         </div>
     </section>
 

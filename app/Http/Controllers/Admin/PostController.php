@@ -38,9 +38,9 @@ class PostController extends Controller
         }
 
         Post::create([
-            'title' => $request->title,
-            'slug' => Str::slug($request->title), 
-            'content' => $request->content,
+            'title' => $request->input('title'),
+            'slug' => Str::slug($request->input('title')), 
+            'content' => $request->input('content'),
             'image' => $imagePath
         ]);
 
@@ -81,8 +81,8 @@ class PostController extends Controller
             $post->image = $path;
         }
 
-        $post->title = $request->title;
-        $post->content  = $request->content;
+        $post->title = $request->input('title');
+        $post->content  = $request->input('content');
         
         $post->save();
 

@@ -12,18 +12,17 @@ class Donasi extends Model
 
     protected $table = 'donations';
 
-    // SESUAIKAN DENGAN SCREENSHOT DATABASE KAMU
+    
     protected $fillable = [
         'campaign_id',
-        'donatur_name',     // Sebelumnya 'nama'
-        'email',            // (Opsional)
-        'is_anonymous',     // Untuk fitur Hamba Allah
-        'jenis_donasi',     // manual/otomatis
-        'kategori_donasi',  // bencana/pendidikan/dll
-        'nama_paket',       // (Opsional)
-        'amount',           // Sebelumnya 'nominal'
-        'message',          // Sebelumnya 'pesan'
-        'payment_proof',    // Sebelumnya 'bukti_transfer'
+        'donatur_name',     
+        'email',           
+        'is_anonymous',    
+        'jenis_donasi',     
+        'kategori_donasi',  
+        'nama_paket',       
+        'amount',           
+        'message',          
         'status',
     ];
     public function campaign()

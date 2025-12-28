@@ -1,75 +1,79 @@
 @extends('layouts.front')
 
 @section('content')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 <section class="page-banner-section fix section-padding" style="background-color: #f8f9fa;">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="card border-0 shadow-lg" style="border-radius: 20px;">
                     
-                    {{-- [PERUBAHAN 1] Bagian Header --}}
+                    {{-- Header Card --}}
                     <div class="card-header bg-success text-white text-center py-4" style="border-radius: 20px 20px 0 0;">
                         @if(isset($campaign) && $campaign)
                             <h3><i class="fas fa-hand-holding-heart me-2"></i>Donasi: {{ $campaign->nama_campaign }}</h3>
                         @else
-                            <h3><i class="fas fa-hand-holding-usd me-2"></i>Formulir Donasi Sukarela</h3>
+                            <h3><i class="fas fa-hand-holding-usd me-2"></i>Formulir Donasi</h3>
                         @endif
+                        <p class="mb-0">Silakan isi nominal donasi sesuai keikhlasan Anda.</p>
                     </div>
 
                     <div class="card-body p-5">
                         
-                        {{-- Alert Sukses --}}
-                        @if(session('success'))
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                <strong>Alhamdulillah!</strong> {{ session('success') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        @endif
-
-                        {{-- Alert Error --}}
-                        @if($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
-                                    @foreach($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
-
-                        <form id="manualDonationForm" action="{{ route('donasi.store') }}" method="POST" enctype="multipart/form-data">
+                        {{-- Form Start --}}
+                        <form id="donationForm" action="{{ route('donasi.store') }}" method="POST">
                             @csrf
                             
-                            {{-- [PERUBAHAN 2] Bagian Input Hidden ID (PENTING) --}}
-                            @if(isset($campaign) && $campaign)
-                                <input type="hidden" name="campaign_id" value="{{ $campaign->id }}">
-                            @else
-                                <input type="hidden" name="campaign_id" value="0">
-                            @endif
+                            <input type="hidden" name="campaign_id" value="{{ isset($campaign) ? $campaign->id : 0 }}">
+                            <input type="hidden" name="snap_token" id="snap_token">
+                            <input type="hidden" name="jenis_donasi" value="manual">
 
+                            <!-- 1. Input Nominal -->
                             <div class="mb-4">
                                 <label class="fw-bold mb-2">Mau Donasi Berapa?</label>
                                 <div class="input-group input-group-lg">
                                     <span class="input-group-text bg-light fw-bold">Rp</span>
                                     <input type="number" name="amount" class="form-control" placeholder="Min: 10.000" min="10000" required>
                                 </div>
+                                <small class="text-muted">Nominal bebas, minimal Rp 10.000</small>
                             </div>
 
+                            <!-- 2. Kategori Donasi -->
                             <div class="mb-4">
-                                <label class="fw-bold mb-2">Tujuan Donasi</label>
-                                <select name="kategori_donasi" class="form-select form-select-lg">
-                                    <option value="umum">❤️ Donasi Umum</option>
-                                    <option value="bencana">🌋 Bencana Alam</option>
-                                    <option value="kemanusiaan">🤝 Kemanusiaan</option>
-                                    <option value="pendidikan">🎓 Pendidikan</option>
+                                <label class="fw-bold mb-2">Tujuan Donasi / Kategori</label>
+                                <select name="kategori_donasi" class="form-select form-select-lg" style="height: auto; padding: 12px 15px;" required>
+                                    <option value="" selected disabled>-- Pilih Tujuan Donasi --</option>
+                                    
+                                    <optgroup label="Kemanusiaan & Sosial">
+                                        <option value="bencana_alam" {{ request('kategori') == 'bencana_alam' ? 'selected' : '' }}>🌋 Bencana Alam & Darurat</option>
+                                        <option value="pangan_gizi" {{ request('kategori') == 'pangan_gizi' ? 'selected' : '' }}>🍚 Rice Bowl & Sembako (Pangan)</option>
+                                        <option value="infrastruktur" {{ request('kategori') == 'infrastruktur' ? 'selected' : '' }}>🕌 Rumah Ibadah & Infrastruktur</option>
+                                        <option value="ekonomi" {{ request('kategori') == 'ekonomi' ? 'selected' : '' }}>💰 Pemberdayaan Ekonomi Dhuafa</option>
+                                    </optgroup>
+
+                                    <optgroup label="Kesehatan & Pendidikan">
+                                        <option value="medis" {{ request('kategori') == 'medis' ? 'selected' : '' }}>🏥 Bantuan Medis & Kesehatan</option>
+                                        <option value="pendidikan" {{ request('kategori') == 'pendidikan' ? 'selected' : '' }}>🎓 Beasiswa & Pendidikan</option>
+                                        <option value="penelitian" {{ request('kategori') == 'penelitian' ? 'selected' : '' }}>🔬 Penelitian & Inovasi Sosial</option>
+                                    </optgroup>
+
+                                    <optgroup label="Lingkungan & Makhluk Hidup">
+                                        <option value="lingkungan" {{ request('kategori') == 'lingkungan' ? 'selected' : '' }}>🌳 Lingkungan Hidup</option>
+                                        <option value="satwa" {{ request('kategori') == 'satwa' ? 'selected' : '' }}>🐾 Dunia Satwa & Shelter</option>
+                                    </optgroup>
+
+                                    <optgroup label="Kreatif & Profesi">
+                                        <option value="seni_kreatif" {{ request('kategori') == 'seni_kreatif' ? 'selected' : '' }}>🎨 Seni, Film & Proyek Kreatif</option>
+                                        <option value="guru_honorer" {{ request('kategori') == 'guru_honorer' ? 'selected' : '' }}>👨‍🏫 Dukungan Guru Honorer</option>
+                                    </optgroup>
+                                    
+                                    <option value="lainnya" {{ request('kategori') == 'lainnya' ? 'selected' : '' }}>❤️ Donasi Umum Lainnya</option>
                                 </select>
                             </div>
 
+                            <!-- 3. Data Diri -->
                             <div class="mb-4">
                                 <label class="fw-bold mb-2">Nama Donatur</label>
-                                <input type="text" name="donatur_name" id="inputNama" class="form-control form-control-lg" required>
+                                <input type="text" name="donatur_name" id="inputNama" class="form-control form-control-lg" placeholder="Nama Lengkap" required>
                                 
                                 <div class="form-check mt-2">
                                     <input class="form-check-input" type="checkbox" name="is_anonymous" id="anonimCheck" value="1">
@@ -82,17 +86,19 @@
                                 <input type="email" name="email" class="form-control" placeholder="Contoh: nama@email.com">
                             </div>
 
+                            <!-- 4. Pesan -->
                             <div class="mb-4">
                                 <label class="fw-bold mb-2">Pesan / Doa</label>
-                                <textarea name="message" class="form-control" rows="3"></textarea>
+                                <textarea name="message" class="form-control" rows="3" placeholder="Tulis pesan semangat atau doa..."></textarea>
                             </div>
 
-                            <div class="mb-4">
-                                <label class="fw-bold mb-2">Upload Bukti Transfer</label>
-                                <input type="file" name="payment_proof" class="form-control form-control-lg" accept="image/*" required>
+                            <!-- Tombol Aksi -->
+                            <div class="d-grid gap-2">
+                                <button type="button" id="submitBtn" onclick="processDonation()" class="btn btn-success btn-lg w-100 py-3 fw-bold">
+                                    <i class="fas fa-qrcode me-2"></i> Lanjut Pembayaran (Otomatis)
+                                </button>
+                                <a href="{{ url('/') }}" class="btn btn-outline-secondary py-3">Batal / Kembali</a>
                             </div>
-
-                            <button type="submit" class="btn btn-success btn-lg w-100 py-3">Kirim Donasi</button>
                         </form>
 
                     </div>
@@ -102,33 +108,5 @@
     </div>
 </section>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        @if(session('success'))
-            Swal.fire({
-                title: 'Alhamdulillah!',
-                text: "{{ session('success') }}",
-                icon: 'success',
-                confirmButtonText: 'Tutup',
-                confirmButtonColor: '#198754'
-            });
-        @endif
-
-        var checkbox = document.getElementById('anonimCheck');
-        var inputNama = document.getElementById('inputNama');
-        
-        if(checkbox) {
-            checkbox.addEventListener('change', function() {
-                if(this.checked) {
-                    inputNama.value = 'Hamba Allah';
-                    inputNama.readOnly = true;
-                } else {
-                    inputNama.value = '';
-                    inputNama.readOnly = false;
-                }
-            });
-        }
-    });
-</script>
 
 @endsection

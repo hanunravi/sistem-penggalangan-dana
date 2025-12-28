@@ -6,15 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Campaign extends Model
 {
-    // Sesuaikan dengan nama tabel di database Anda
-    // Jika nama tabelnya 'campaigns', baris ini opsional.
-    // protected $table = 'campaigns'; 
-
+    // Pastikan fillable sesuai dengan kolom di Database Migration
     protected $fillable = [
         'title', 
+        'slug',             // WAJIB ADA
         'image', 
-        'target_dana', 
-        'nominal_terkumpul', // Kolom ini bisa kita update manual atau biarkan sistem menghitung
+        'target_amount',    // Sesuai DB
+        'current_amount',   // Sesuai DB
         'description', 
         'status'
     ];
@@ -24,40 +22,37 @@ class Campaign extends Model
     // =========================================================
     public function donasis()
     {
-        // Pastikan Anda sudah punya Model Donasi
         return $this->hasMany(Donasi::class, 'campaign_id');
     }
 
     // =========================================================
     // 2. HITUNG TOTAL UANG TERKUMPUL (OTOMATIS)
     // =========================================================
-    // Fitur ini disebut "Accessor". 
-    // Cara panggil di Blade nanti: $campaign->total_donasi_fix
+    // Kita gunakan kolom 'current_amount' di database sebagai cache/utama.
+    // Tapi jika ingin hitung ulang dari tabel donasi, bisa pakai logika ini.
     public function getTotalDonasiFixAttribute()
     {
-        // Logika: Ambil semua donasi untuk campaign ini, filter yang APPROVED, lalu jumlahkan amount-nya
-        return $this->donasis()->where('status', 'approved')->sum('amount');
+        // Opsi 1: Ambil langsung dari kolom database (Lebih Cepat)
+        return $this->current_amount;
+
+        // Opsi 2: Hitung manual dari relasi (Lebih Akurat tapi query nambah)
+        // return $this->donasis()->where('status', 'approved')->sum('amount');
     }
 
     // =========================================================
     // 3. HITUNG PERSEN (%) UNTUK PROGRESS BAR
     // =========================================================
-    // Cara panggil di Blade nanti: $campaign->persentase
     public function getPersentaseAttribute()
     {
-        // Ambil total uang dari fungsi di atas
-        $terkumpul = $this->total_donasi_fix; 
-        $target = $this->target_dana;
+        $terkumpul = $this->total_donasi_fix; // Menggunakan accessor di atas
+        $target = $this->target_amount;       // Sesuai nama kolom DB
 
-        // Cegah error jika targetnya 0 atau belum diisi
         if ($target <= 0) {
             return 0;
         }
 
-        // Hitung persen
         $persen = ($terkumpul / $target) * 100;
 
-        // Kita kunci maksimal 100% (supaya bar tidak keluar layar jika donasi berlebih)
         return min($persen, 100);
     }
 }

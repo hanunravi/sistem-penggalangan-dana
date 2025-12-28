@@ -1,422 +1,288 @@
 @extends('layouts.admin')
 
+@section('title', 'Dashboard Donasi')
+
 @section('content')
-    <!-- Main Content -->
-            <!-- 2. Isi Halaman (Body) -->
-            <div class="hk-pg-body">
-                <div class="tab-content">
-                    <div class="tab-pane fade show active" id="tab_block_1">
-                        
-                        {{-- BARIS 1: KARTU STATISTIK (4 Kotak Atas) --}}
-                        <div class="row mb-4">
-                            
-                            <!-- Kartu 1: Total Dana -->
-                            <div class="col-xxl-3 col-md-6 mb-3">
-                                <div class="card card-border h-100 bg-primary text-white border-0 shadow-sm">
-                                    <div class="card-body">
-                                        <h6 class="text-white">Total Dana Terkumpul</h6>
-                                        <h3 class="text-white mt-2 fw-bold">Rp {{ number_format($totalDonasi ?? 0, 0, ',', '.') }}</h3>
-                                        <span class="fs-7 opacity-75">Akumulasi semua kategori</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Kartu 2: Total Donatur -->
-                            <div class="col-xxl-3 col-md-6 mb-3">
-                                <div class="card card-border h-100 bg-success text-white border-0 shadow-sm">
-                                    <div class="card-body">
-                                        <h6 class="text-white">Total Orang Baik</h6>
-                                        <h3 class="text-white mt-2 fw-bold">{{ number_format($jumlahDonatur ?? 0) }}</h3>
-                                        <span class="fs-7 opacity-75">Donatur yang berpartisipasi</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Kartu 3: Menunggu Verifikasi -->
-                            <div class="col-xxl-3 col-md-6 mb-3">
-                                <div class="card card-border h-100 bg-warning text-white border-0 shadow-sm">
-                                    <div class="card-body">
-                                        <h6 class="text-white">Perlu Verifikasi</h6>
-                                        <h3 class="text-white mt-2 fw-bold">{{ number_format($donasiPending ?? 0) }}</h3>
-                                        <span class="fs-7 opacity-75">Transaksi pending (Cek segera!)</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Kartu 4: Campaign Aktif -->
-                            <div class="col-xxl-3 col-md-6 mb-3">
-                                <div class="card card-border h-100 bg-dark text-white border-0 shadow-sm">
-                                    <div class="card-body">
-                                        <h6 class="text-white">Campaign Aktif</h6>
-                                        <h3 class="text-white mt-2 fw-bold">3</h3>
-                                        <span class="fs-7 opacity-75">Program donasi berjalan</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        {{-- BARIS 2: GRAFIK & TARGET --}}
-                        <div class="row">                           
-                            <div class="col-xxl-9 col-lg-8 col-md-7 mb-md-4 mb-3">
-                                <div class="card card-border mb-0 h-100">
-                                    <div class="card-header card-header-action">
-                                        <h6>Statistik Pemasukan Bulanan ({{ date('Y') }})</h6>
-                                    </div>
-                                    <div class="card-body">
-                                        {{-- Container Grafik --}}
-                                        <div style="position: relative; height: 300px; width: 100%;">
-                                            {{-- Canvas ini akan digambar oleh Script di bawah --}}
-                                            <canvas id="myAreaChart"></canvas>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="col-xxl-3 col-lg-4 col-md-5 mb-md-4 mb-3">
-                                <div class="card card-border mb-0 h-100">
-                                    <div class="card-header card-header-action">
-                                        <h6>Ringkasan Status</h6>
-                                    </div>
-                                    <div class="card-body">
-                                        
-                                        {{-- Bagian Teks Ringkasan --}}
-                                        <div class="mt-4 px-3">
-                                            <div class="mb-4 d-flex justify-content-between align-items-center border-bottom pb-2">
-                                                <div>
-                                                    <span class="badge bg-primary badge-dot me-2"></span>
-                                                    <span class="fw-medium">Dana Terkumpul</span>
-                                                </div>
-                                                <span class="fw-bold text-dark">Rp {{ number_format($totalDonasi, 0, ',', '.') }}</span>
-                                            </div>
-
-                                            <div class="mb-4 d-flex justify-content-between align-items-center border-bottom pb-2">
-                                                <div>
-                                                    <span class="badge bg-warning badge-dot me-2"></span>
-                                                    <span class="fw-medium">Pending (Jml)</span>
-                                                </div>
-                                                <span class="fw-bold text-dark">{{ $donasiPending }} Transaksi</span>
-                                            </div>
-
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <span class="badge bg-success badge-dot me-2"></span>
-                                                    <span class="fw-medium">Total Donatur</span>
-                                                </div>
-                                                <span class="fw-bold text-dark">{{ $jumlahDonatur }} Orang</span>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {{-- @push('scripts') --}} 
-                        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                        <script>
-                            document.addEventListener("DOMContentLoaded", function() {
-                                // Ambil data dari Controller
-                                var labelBulan = @json($labelBulan); 
-                                var dataBulanan = @json($dataBulanan); 
-
-                                var ctx = document.getElementById("myAreaChart").getContext('2d');
-                                var myLineChart = new Chart(ctx, {
-                                    type: 'line',
-                                    data: {
-                                        labels: labelBulan,
-                                        datasets: [{
-                                            label: "Pemasukan",
-                                            tension: 0.3, // Garis melengkung halus
-                                            backgroundColor: "rgba(78, 115, 223, 0.05)",
-                                            borderColor: "rgba(78, 115, 223, 1)",
-                                            pointRadius: 3,
-                                            pointBackgroundColor: "rgba(78, 115, 223, 1)",
-                                            pointBorderColor: "rgba(78, 115, 223, 1)",
-                                            pointHoverRadius: 3,
-                                            pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
-                                            pointHoverBorderColor: "rgba(78, 115, 223, 1)",
-                                            pointHitRadius: 10,
-                                            pointBorderWidth: 2,
-                                            data: dataBulanan,
-                                        }],
-                                    },
-                                    options: {
-                                        maintainAspectRatio: false,
-                                        layout: {
-                                            padding: { left: 10, right: 25, top: 25, bottom: 0 }
-                                        },
-                                        scales: {
-                                            x: {
-                                                grid: { display: false, drawBorder: false },
-                                                ticks: { maxTicksLimit: 7 }
-                                            },
-                                            y: {
-                                                ticks: {
-                                                    maxTicksLimit: 5,
-                                                    padding: 10,
-                                                    callback: function(value) {
-                                                        return 'Rp ' + new Intl.NumberFormat('id-ID').format(value);
-                                                    }
-                                                },
-                                                grid: { color: "#eaecf4", drawBorder: false, borderDash: [2] }
-                                            },
-                                        },
-                                        plugins: {
-                                            legend: { display: false },
-                                            tooltip: {
-                                                callbacks: {
-                                                    label: function(context) {
-                                                        return ' Rp ' + new Intl.NumberFormat('id-ID').format(context.parsed.y);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                });
-                            });
-                        </script>
-                        {{-- @endpush --}}
-
-                        {{-- BARIS 3: TABEL DONASI TERBARU --}}
-                        <div class="row">
-                            <div class="col-md-12 mb-md-4 mb-3">
-                                <div class="card card-border mb-0 h-100">
-                                    
-                                    {{-- Header Tabel --}}
-                                    <div class="card-header card-header-action">
-                                        <h6>Donasi Terbaru Masuk</h6>
-                                        <div class="card-action-wrap">
-                                            <a href="#" class="btn btn-sm btn-primary">Lihat Semua Data</a>
-                                        </div>
-                                    </div>
-
-                                    {{-- Body Tabel --}}
-                                    <div class="card-body p-0">
-                                        {{-- KODE NOTIFIKASI DI SINI --}}
-                                        @if(session('success'))
-                                            <div class="alert alert-success alert-dismissible fade show m-3" role="alert">
-                                                <i class="fa fa-check-circle me-2"></i> {{ session('success') }}
-                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                            </div>
-                                        @endif
-
-                                        @if(session('error'))
-                                            <div class="alert alert-danger alert-dismissible fade show m-3" role="alert">
-                                                <i class="fa fa-exclamation-circle me-2"></i> {{ session('error') }}
-                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                            </div>
-                                        @endif
-                                        {{-- BATAS AKHIR KODE NOTIFIKASI --}}
-                                        <div class="table-responsive">
-                                            <table class="table table-hover mb-0">
-                                                <thead class="bg-light">
-                                                    <tr>
-                                                        <th class="ps-4">No</th>
-                                                        <th>Nama Donatur</th>
-                                                        <th>Kategori</th>
-                                                        <th>Nominal</th>
-                                                        <th>Tanggal</th>
-                                                        <th>Status</th>
-                                                        <th class="text-center">Aksi</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {{-- LOOPING DATA DONASI --}}
-                                                    @forelse($recentDonations ?? [] as $donasi)
-                                                    <tr>
-                                                        <td class="ps-4">{{ $loop->iteration }}</td>
-                                                        
-                                                        {{-- Kolom Nama & Pesan --}}
-                                                        <td>
-                                                            <div class="media align-items-center">
-                                                                <div class="media-head me-3">
-                                                                    <div class="avatar avatar-xs avatar-rounded bg-light text-primary d-flex align-items-center justify-content-center fw-bold">
-                                                                        {{-- Inisial Nama --}}
-                                                                        {{ substr($donasi->donatur_name ?? 'H', 0, 1) }}
-                                                                    </div>
-                                                                </div>
-                                                                <div class="media-body">
-                                                                    <div class="text-high-em fw-bold">{{ $donasi->donatur_name ?? 'Hamba Allah' }}</div> 
-                                                                    <div class="fs-8 text-muted text-truncate" style="max-width: 150px;">
-                                                                        {{ Str::limit($donasi->message ?? 'Tidak ada pesan', 30) }}
-                                                                    </div> 
-                                                                </div>
-                                                            </div>
-                                                        </td>
-
-                                                        {{-- Kolom Kategori --}}
-                                                       <td>
-                                                            @if($donasi->campaign_id && $donasi->campaign)
-                                                                
-                                                                {{-- Jika Donasi via Campaign: Tampilkan Judul Campaign --}}
-                                                                <div class="fw-bold text-primary" style="line-height: 1.2;">
-                                                                    {{ $donasi->campaign->judul ?? $donasi->campaign->title ?? 'Campaign Tak Ditemukan' }}
-                                                                </div>
-                                                                <small class="text-muted" style="font-size: 0.75rem;">
-                                                                    <i class="fas fa-bullhorn me-1"></i>Campaign
-                                                                </small>
-
-                                                            @else
-                                                                
-                                                                {{-- Jika Donasi Biasa: Tampilkan Kategori Donasi --}}
-                                                                <div class="fw-bold">
-                                                                    {{ ucfirst($donasi->kategori_donasi) }}
-                                                                </div>
-
-                                                            @endif
-
-                                                            {{-- LOGIKA 2: Jenis Donasi (Manual vs Paket) - Tetap Dipertahankan --}}
-                                                            <div class="mt-1">
-                                                                @if($donasi->jenis_donasi == 'paket')
-                                                                    <small class="badge bg-info text-white">
-                                                                        <i class="fas fa-box me-1"></i> {{ $donasi->nama_paket }}
-                                                                    </small>
-                                                                @else
-                                                                    <small class="badge bg-secondary text-white">Manual</small>
-                                                                @endif
-                                                            </div>
-                                                        </td>
-
-                                                        {{-- Kolom Nominal --}}
-                                                        <td>
-                                                            <span class="fw-bold text-dark">Rp {{ number_format($donasi->amount, 0, ',', '.') }}</span>
-                                                        </td>
-
-                                                        {{-- Kolom Tanggal --}}
-                                                        <td>{{ date('d M Y', strtotime($donasi->created_at)) }}</td>
-
-                                                        {{-- Kolom Status --}}
-                                                        <td>
-                                                            @if($donasi->status == 'approved')
-                                                                {{-- SUKSES: Paksa teks jadi Putih --}}
-                                                                <span class="badge bg-success" style="color: white !important;">Berhasil</span>
-                                                            
-                                                            @elseif($donasi->status == 'pending')
-                                                                {{-- PENDING: Paksa teks jadi Hitam Pekat (#000) agar kontras dengan warna kuning --}}
-                                                                <span class="badge bg-warning" style="color: #000000 !important;">Pending</span>
-                                                            
-                                                            @else
-                                                                {{-- DITOLAK: Paksa teks jadi Putih --}}
-                                                                <span class="badge bg-danger" style="color: white !important;">Ditolak</span>
-                                                            @endif
-                                                        </td>
-
-                                                        {{-- Kolom Aksi --}}
-                                                       <td class="text-center">  
-                                                            <button type="button" class="btn btn-primary btn-sm" 
-                                                                    data-bs-toggle="modal" 
-                                                                    data-bs-target="#modalDetail{{ $donasi->id }}">
-                                                                Lihat Bukti
-                                                            </button>
-                                                            </div>
-                                                        </td>
-                                                    {{-- ========================================== --}}
-                                                    {{-- MODAL DETAIL (POPUP) --}}
-                                                    {{-- ========================================== --}}
-                                                    <div class="modal fade" id="modalDetail{{ $donasi->id }}" tabindex="-1" aria-hidden="true">
-                                                        <div class="modal-dialog modal-dialog-centered">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title">Verifikasi Bukti Transfer</h5>
-                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    
-                                                                    {{-- 1. FOTO BUKTI TRANSFER --}}
-                                                                    <div class="text-center mb-3 p-2 bg-light border rounded">
-                                                                        @if($donasi->payment_proof)
-                                                                           <img src="{{ asset('storage/payment_proof/' . $donasi->payment_proof) }}" 
-                                                                            class="img-fluid rounded" 
-                                                                            style="max-height: 400px; object-fit: contain;" 
-                                                                            alt="Bukti Transfer">>
-                                                                        @else
-                                                                            <div class="py-4 text-muted">
-                                                                                <i class="fa fa-image fa-3x mb-2"></i><br>
-                                                                                Tidak ada bukti upload
-                                                                            </div>
-                                                                        @endif
-                                                                    </div>
-
-                                                                    {{-- 2. INFO DONATUR --}}
-                                                                    <div class="mb-3">
-                                                                        <label class="small text-muted fw-bold">Nama Pengirim:</label>
-                                                                        <div class="fs-6">{{ $donasi->donatur_name ?? 'Hamba Allah' }}</div>
-                                                                    </div>
-                                                                    <div class="mb-4">
-                                                                        <label class="small text-muted fw-bold">Nominal:</label>
-                                                                        <div class="fs-5 text-primary fw-bold">Rp {{ number_format($donasi->amount, 0, ',', '.') }}</div>
-                                                                    </div>
-
-                                                                    <hr>
-
-                                                                    {{-- 3. TOMBOL AKSI (TERIMA / TOLAK / HAPUS) --}}
-                                                                    <div class="d-grid gap-2">
-                                                                        @if($donasi->status == 'pending')
-                                                                            <div class="row g-2">
-                                                                                <div class="col-6">
-                                                                                    {{-- Tombol TERIMA --}}
-                                                                                    <form action="{{ route('admin.donasi.approve', $donasi->id) }}" method="POST">
-                                                                                        @csrf @method('PATCH')
-                                                                                        <button type="submit" class="btn btn-success w-100">
-                                                                                            <i class="fa fa-check"></i> Terima
-                                                                                        </button>
-                                                                                    </form>
-                                                                                </div>
-                                                                                <div class="col-6">
-                                                                                    {{-- Tombol TOLAK --}}
-                                                                                    <form action="{{ route('admin.donasi.reject', $donasi->id) }}" method="POST">
-                                                                                        @csrf @method('PATCH')
-                                                                                        <button type="submit" class="btn btn-warning w-100" onclick="return confirm('Yakin tolak?')">
-                                                                                            <i class="fa fa-times"></i> Tolak
-                                                                                        </button>
-                                                                                    </form>
-                                                                                </div>
-                                                                            </div>
-                                                                        @else
-                                                                            <div class="alert alert-info text-center py-2 mb-0">
-                                                                                Status saat ini: <strong>{{ ucfirst($donasi->status) }}</strong>
-                                                                            </div>
-                                                                        @endif
-
-                                                                        {{-- Tombol HAPUS (Selalu muncul) --}}
-                                                                        <form action="{{ route('admin.donasi.delete', $donasi->id) }}" method="POST" class="mt-2">
-                                                                            @csrf @method('DELETE')
-                                                                            <button type="submit" class="btn btn-outline-danger w-100 btn-sm" onclick="return confirm('Yakin hapus permanen?')">
-                                                                                <i class="fa fa-trash me-1"></i> Hapus Data
-                                                                            </button>
-                                                                        </form>
-                                                                    </div>
-
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    </tr>
-                                                    @empty
-                                                    <tr>
-                                                        <td colspan="7" class="text-center py-5">
-                                                            <div class="d-flex flex-column align-items-center">
-                                                                <i class="fas fa-box-open fa-3x text-muted mb-3 opacity-50"></i>
-                                                                <h6 class="text-muted">Belum ada data donasi terbaru.</h6>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    @endforelse
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
+    <!-- Page Header -->
+    <div class="hk-pg-header pg-header-wth-tab pt-7">
+        <div class="d-flex">
+            <div class="d-flex flex-wrap justify-content-between flex-1">
+                <div class="mb-lg-0 mb-2 me-8">
+                    <h1 class="pg-title">Dashboard Donasi</h1>
+                    <p>Ringkasan statistik penerimaan donasi dan aktivitas terbaru.</p>
+                </div>
+                <div class="pg-header-action-wrap">
+                    <div class="input-group w-300p">
+                        <span class="input-affix-wrapper">
+                            <span class="input-prefix">
+                                <span class="feather-icon"><i data-feather="calendar"></i></span>
+                            </span>
+                            <input class="form-control form-wth-icon" name="datetimes" value="{{ date('d F Y') }}" readonly>
+                        </span>
                     </div>
                 </div>
             </div>
-            <!-- /Page Body -->
-            
         </div>
     </div>
-    <!-- /Main Content -->
+    <!-- /Page Header -->
 
+    <!-- Page Body -->
+    <div class="hk-pg-body">
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="tab_block_1">
+                
+                <!-- Row 1: Statistik & Grafik -->
+                <div class="row">
+                    <div class="col-xxl-9 col-lg-8 col-md-7 mb-md-4 mb-3">
+                        <div class="card card-border mb-0 h-100">
+                            <div class="card-header card-header-action">
+                                <h6>Statistik Pemasukan (Tahun {{ date('Y') }})</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="text-center mb-4">
+                                    <div class="d-inline-block">
+                                        <span class="badge-status">
+                                            <span class="badge bg-primary badge-indicator badge-indicator-nobdr"></span>
+                                            <span class="badge-label">Total Donasi Sukses</span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div style="height: 300px;">
+                                    <canvas id="donation_chart"></canvas>
+                                </div>
+                                
+                                <div class="separator-full mt-5"></div>
+                                
+                                <div class="flex-grow-1 ms-lg-3 mt-4">
+                                    <div class="row">
+                                        <div class="col-xxl-3 col-sm-6 mb-xxl-0 mb-3">
+                                            <span class="d-block fw-medium fs-7">Total Terkumpul</span>
+                                            <div class="d-flex align-items-center">
+                                                <span class="d-block fs-5 fw-medium text-dark mb-0">
+                                                    Rp {{ number_format($totalDonasi, 0, ',', '.') }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xxl-3 col-sm-6 mb-xxl-0 mb-3">
+                                            <span class="d-block fw-medium fs-7">Total Transaksi</span>
+                                            <div class="d-flex align-items-center">
+                                                <span class="d-block fs-4 fw-medium text-dark mb-0">{{ $jumlahDonatur }}</span>
+                                                <small class="text-muted ms-2">x</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-xxl-3 col-sm-6 mb-xxl-0 mb-3">
+                                            <span class="d-block fw-medium fs-7">Menunggu Pembayaran</span>
+                                            <div class="d-flex align-items-center">
+                                                <span class="d-block fs-4 fw-medium text-dark mb-0">{{ $donasiPending }}</span>
+                                                <span class="badge badge-sm badge-soft-warning ms-1">Pending</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xxl-3 col-sm-6">
+                                            <span class="d-block fw-medium fs-7">Program Aktif</span>
+                                            <div class="d-flex align-items-center">
+                                                <span class="d-block fs-4 fw-medium text-dark mb-0">{{ $campaignCount }}</span>
+                                                <small class="text-muted ms-2">Campaign</small>
+                                            </div>
+                                        </div>
+                                    </div>                                
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Kolom Kanan: Donut Chart -->
+                    <div class="col-xxl-3 col-lg-4 col-md-5 mb-md-4 mb-3">
+                        <div class="card card-border mb-0 h-100">
+                            <div class="card-header card-header-action">
+                                <h6>Ringkasan Status</h6>
+                            </div>
+                            <div class="card-body text-center d-flex flex-column justify-content-center">
+                                <div style="height: 200px; position: relative;">
+                                    <canvas id="status_chart"></canvas>
+                                </div>
+                                <div class="mt-4 text-start">
+                                    <div class="mb-3">
+                                        <span class="d-block badge-status lh-1">
+                                            <span class="badge bg-success badge-indicator badge-indicator-nobdr d-inline-block"></span>
+                                            <span class="badge-label d-inline-block">Berhasil</span>
+                                        </span>
+                                        <span class="d-block text-dark fs-5 fw-medium mb-0 mt-1">{{ $jumlahDonatur }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="d-block badge-status lh-1">
+                                            <span class="badge bg-warning badge-indicator badge-indicator-nobdr d-inline-block"></span>
+                                            <span class="badge-label d-inline-block">Pending</span>
+                                        </span>
+                                        <span class="d-block text-dark fs-5 fw-medium mb-0 mt-1">{{ $donasiPending }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Row 2: Tabel Donasi Terbaru -->
+                <div class="row">
+                    <div class="col-md-12 mb-md-4 mb-3">
+                        <div class="card card-border mb-0 h-100">
+                            <div class="card-header card-header-action">
+                                <h6>Donasi Terbaru <span class="badge badge-sm badge-light ms-1">{{ count($recentDonations) }}</span></h6>
+                                <div class="card-action-wrap">
+                                    <a href="{{ route('admin.donasi.index') }}" class="btn btn-sm btn-outline-light">Lihat Semua</a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle mb-0">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th>Donatur</th>
+                                                <th>Kategori</th>
+                                                <th>Nominal</th>
+                                                <th>Status</th>
+                                                <th>Tanggal</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @forelse($recentDonations as $d)
+                                            <tr>
+                                                <td>
+                                                    <div class="media align-items-center">
+                                                        <div class="media-head me-2">
+                                                            <div class="avatar avatar-xs avatar-rounded">
+                                                                <span class="avatar-initial bg-soft-primary text-primary">
+                                                                    {{ substr($d->donatur_name, 0, 1) }}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="media-body">
+                                                            <div class="text-high-em fw-bold">{{ $d->donatur_name }}</div>
+                                                            <div class="fs-7 text-muted">{{ $d->is_anonymous ? 'Hamba Allah' : ($d->email ?? '-') }}</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    @if($d->nama_paket)
+                                                        <span class="badge badge-soft-info">{{ $d->nama_paket }}</span>
+                                                    @else
+                                                        <span class="badge badge-soft-secondary">Manual</span>
+                                                    @endif
+                                                </td>
+                                                <td class="fw-bold text-success">
+                                                    Rp {{ number_format($d->amount, 0, ',', '.') }}
+                                                </td>
+                                                <td>
+                                                    @if($d->status == 'approved')
+                                                        <span class="badge badge-success">Sukses</span>
+                                                    @elseif($d->status == 'pending')
+                                                        <span class="badge badge-warning">Pending</span>
+                                                    @else
+                                                        <span class="badge badge-danger">Gagal</span>
+                                                    @endif
+                                                </td>
+                                                <td>{{ $d->created_at->format('d M Y') }}</td>
+                                            </tr>
+                                            @empty
+                                            <tr>
+                                                <td colspan="5" class="text-center p-3 text-muted">Belum ada donasi hari ini.</td>
+                                            </tr>
+                                            @endforelse
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <!-- /Page Body -->
 @endsection
+
+@push('scripts')
+{{-- PENTING: LIBRARY CHART JS HARUS DI-LOAD DI SINI --}}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // --- 1. CHART DONASI (Line Chart) ---
+        const ctxDonasi = document.getElementById('donation_chart');
+        
+        if (ctxDonasi) {
+            const labelBulan = {!! json_encode($labelBulan) !!};
+            const dataBulanan = {!! json_encode($dataBulanan) !!};
+
+            new Chart(ctxDonasi, {
+                type: 'line',
+                data: {
+                    labels: labelBulan,
+                    datasets: [{
+                        label: 'Pemasukan (Rp)',
+                        data: dataBulanan,
+                        borderColor: '#007D88', // Warna Teal Jampack
+                        backgroundColor: 'rgba(0, 125, 136, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.3, 
+                        fill: true,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return 'Rp ' + context.raw.toLocaleString('id-ID');
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { borderDash: [2, 4], color: '#e9ecef' }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- 2. CHART STATUS (Doughnut) ---
+        const ctxStatus = document.getElementById('status_chart');
+        
+        if (ctxStatus) {
+            const jumlahSukses = {{ $jumlahDonatur }};
+            const jumlahPending = {{ $donasiPending }};
+
+            new Chart(ctxStatus, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Berhasil', 'Pending'],
+                    datasets: [{
+                        data: [jumlahSukses, jumlahPending],
+                        backgroundColor: ['#28a745', '#FFC107'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '75%', 
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+    });
+</script>
+@endpush

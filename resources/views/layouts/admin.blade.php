@@ -1,19 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>@yield('title', 'Admin Dashboard')</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <!-- CSS Bawaan Template (Pastikan path ini benar di public kamu) -->
-    <!-- Jika belum ada, gunakan CDN Bootstrap sementara agar tidak hancur -->
+    <!-- CSS Bawaan Template -->
+    <link href="{{ asset('assets/admin/css/style.css') }}" rel="stylesheet" type="text/css">
+    
+    <!-- CSS Fallback (Bootstrap CDN) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     
     <!-- Feather Icons -->
     <script src="https://unpkg.com/feather-icons"></script>
 
-    <!-- CSS Custom untuk Memperbaiki Layout jika CSS Template Gagal Load -->
+    <!-- CSS Custom untuk Memperbaiki Layout -->
     <style>
         body { background-color: #f4f5f7; font-family: sans-serif; }
         
@@ -68,6 +71,8 @@
             .hk-pg-wrapper { margin-left: 0; width: 100%; }
         }
     </style>
+    
+    @stack('styles')
 </head>
 
 <body>
@@ -98,6 +103,10 @@
     <!-- Script Wajib -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>feather.replace()</script>
+    <script>
+        feather.replace();
+    </script>
+    
+    @stack('scripts')
 </body>
 </html>

@@ -13,99 +13,103 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // --- 1. DATA STATISTIK (KARTU ATAS) ---
+        // 1. STATISTIK UTAMA
         $totalDonasi = Donasi::where('status', 'approved')->sum('amount');
-        $jumlahDonatur = Donasi::count();
+        $jumlahDonatur = Donasi::where('status', 'approved')->count();
         $donasiPending = Donasi::where('status', 'pending')->count();
-        
-        // Opsional: Hitung jumlah campaign aktif untuk kartu ke-4
-        $campaignCount = Campaign::where('status', 'aktif')->count(); 
+        $campaignCount = Campaign::count(); 
 
-        // --- 2. DATA TABEL (Donasi Terbaru) ---
-       $recentDonations = Donasi::orderBy('created_at', 'desc')
-                            ->get();
+        // 2. DATA TABEL TERBARU
+        $recentDonations = Donasi::orderBy('created_at', 'desc')->take(10)->get();
 
-        // --- 3. LOGIKA GRAFIK (BARU DITAMBAHKAN) ---
-        // Ambil data donasi 'approved' tahun ini, kelompokkan per bulan
-        $grafik = Donasi::select(
-                DB::raw('SUM(amount) as total'), 
-                DB::raw('MONTH(created_at) as month')
-            )
-            ->whereYear('created_at', date('Y'))   
-            ->where('status', 'approved')          
-            ->groupBy('month')
-            ->orderBy('month')
+        // 3. GRAFIK BULANAN
+        $donasiTahunIni = Donasi::where('status', 'approved')
+            ->whereYear('created_at', date('Y'))
             ->get();
 
-        // Siapkan array kosong
+        $grafikGrouped = $donasiTahunIni->groupBy(function($item) {
+            return $item->created_at->format('n'); 
+        });
+
         $labelBulan = [];
         $dataBulanan = [];
 
-        // Loop bulan 1 sampai 12 agar grafik tidak bolong
         for ($i = 1; $i <= 12; $i++) {
-            // Nama bulan (January, February, dst)
-            $labelBulan[] = Carbon::create()->month($i)->format('F');
-
-            // Cek apakah ada data di bulan ini
-            $cekData = $grafik->firstWhere('month', $i);
-
-            // Jika ada ambil totalnya, jika tidak ada isi 0
-            $dataBulanan[] = $cekData ? $cekData->total : 0;
+            $labelBulan[] = Carbon::create()->month($i)->translatedFormat('F');
+            $dataBulanan[] = isset($grafikGrouped[$i]) ? $grafikGrouped[$i]->sum('amount') : 0;
         }
 
-        // --- 4. KIRIM SEMUA KE VIEW ---
         return view('admin.dashboard', compact(
-            'totalDonasi', 
-            'jumlahDonatur', 
-            'donasiPending', 
-            'campaignCount',   // Tambahan
-            'recentDonations',
-            'labelBulan',      // Data Grafik (Label)
-            'dataBulanan'      // Data Grafik (Angka)
+            'totalDonasi', 'jumlahDonatur', 'donasiPending', 'campaignCount',   
+            'recentDonations', 'labelBulan', 'dataBulanan'      
         ));
     }
 
-    // --- FUNGSI 1: TERIMA DONASI (APPROVE) ---
+    // --- FUNGSI APPROVE MANUAL (YANG DIPERBAIKI) ---
     public function approveDonation($id)
     {
         $donasi = Donasi::findOrFail($id);
         
-        // Cek status agar saldo tidak bertambah ganda
+        // PENTING: Cek status dulu. Jangan approve kalau sudah approved (biar saldo gak dobel)
         if ($donasi->status !== 'approved') {
             
+            // 1. Ubah Status Jadi Approved
             $donasi->status = 'approved';
             $donasi->save();
 
-            // Tambahkan saldo ke campaign terkait
-            $campaign = Campaign::find($donasi->campaign_id);
-            
-            if ($campaign) {
-                $campaign->nominal_terkumpul = $campaign->nominal_terkumpul + $donasi->amount;
-                $campaign->save();
+            // 2. Tambahkan Saldo ke Campaign (PENTING!)
+            if($donasi->campaign_id) {
+                $campaign = Campaign::find($donasi->campaign_id);
+                
+                if ($campaign) {
+                    // Gunakan increment() agar lebih aman dan otomatis nambah
+                    // Pastikan nama kolom di database adalah 'current_amount'
+                    $campaign->increment('current_amount', $donasi->amount);
+                }
             }
         }
 
-        return redirect()->back()->with('success', 'Alhamdulillah, donasi berhasil diverifikasi.');
+        return redirect()->back()->with('success', 'Donasi berhasil diterima! Saldo campaign telah diperbarui.');
     }
 
-    // --- FUNGSI 2: TOLAK DONASI (REJECT) ---
+    // --- FUNGSI REJECT ---
     public function rejectDonation($id)
     {
         $donasi = Donasi::findOrFail($id);
+        
+        // Jika sebelumnya sudah approved, kita harus kurangi saldo campaign dulu sebelum reject
+        if ($donasi->status === 'approved' && $donasi->campaign_id) {
+            $campaign = Campaign::find($donasi->campaign_id);
+            if ($campaign) {
+                $campaign->decrement('current_amount', $donasi->amount);
+            }
+        }
+
         $donasi->status = 'rejected';
         $donasi->save();
 
-        return redirect()->back()->with('error', 'Status donasi telah diubah menjadi Ditolak.');
+        return redirect()->back()->with('warning', 'Status donasi diubah menjadi Ditolak.');
     }
 
-    // --- FUNGSI 3: HAPUS DONASI ---
+    // --- FUNGSI DELETE ---
     public function deleteDonation($id)
     {
         $donasi = Donasi::findOrFail($id);
 
-        // Hapus file bukti transfer jika ada
-        if ($donasi->payment_proof && file_exists(public_path('storage/payment_proof/' . $donasi->payment_proof))) {
-            unlink(public_path('storage/payment_proof/' . $donasi->payment_proof));
+        // Hapus file bukti jika ada (dan bukan midtrans)
+        if ($donasi->payment_proof && $donasi->payment_proof !== 'midtrans_auto') {
+            $path = public_path('storage/payment_proof/' . $donasi->payment_proof);
+            if (file_exists($path)) {
+                unlink($path);
+            }
+        }
+
+        // Jika menghapus data yang statusnya 'approved', saldo campaign harus dikurangi juga
+        if ($donasi->status === 'approved' && $donasi->campaign_id) {
+            $campaign = Campaign::find($donasi->campaign_id);
+            if ($campaign) {
+                $campaign->decrement('current_amount', $donasi->amount);
+            }
         }
 
         $donasi->delete();

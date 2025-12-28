@@ -1,16 +1,9 @@
-<footer class="main-footer bg-white border-top py-3 mt-4">
-    <div class="container-fluid">
-        <div class="row align-items-center justify-content-between">
-            {{-- Kiri: Copyright --}}
-            <div class="col-md-6 text-center text-md-start small text-muted">
-                Hak Cipta &copy; {{ date('Y') }} <strong>Admin Panel</strong>. 
-                <br class="d-md-none"> Seluruh hak cipta dilindungi.
-            </div>
-
-            {{-- Kanan: Versi --}}
-            <div class="col-md-6 text-center text-md-end small text-muted">
-                Versi 1.0.0
+<div class="hk-footer">
+    <footer class="container-fluid footer">
+        <div class="row">
+            <div class="col-md-12 footer-text">
+                <span class="copy-text">&copy; {{ date('Y') }} Jampack Admin. All rights reserved.</span>
             </div>
         </div>
-    </div>
-</footer>
+    </footer>
+</div>

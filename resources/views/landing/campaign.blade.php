@@ -12,39 +12,73 @@
         <div class="col-md-4 mb-4">
             <div class="card border-0 shadow-sm h-100">
                 {{-- Gambar Campaign --}}
-                <img src="{{ Storage::url($item->image) }}" class="card-img-top" alt="{{ $item->title }}" style="height: 200px; object-fit: cover;">
+                <div class="overflow-hidden" style="height: 200px;">
+                    <img src="{{ asset('storage/' . $item->image) }}" class="card-img-top w-100 h-100" alt="{{ $item->title }}" style="object-fit: cover;">
+                </div>
                 
                 <div class="card-body d-flex flex-column">
                     {{-- Judul Campaign --}}
-                    <h5 class="card-title fw-bold mb-4">{{ $item->title }}</h5>                   
+                    <h5 class="card-title fw-bold mb-3">
+                        <a href="{{ route('campaign.show', $item->id) }}" class="text-decoration-none text-dark">
+                            {{ $item->title }}
+                        </a>
+                    </h5> 
+                    
+                    {{-- Deskripsi Singkat --}}
+                    <p class="card-text text-muted small mb-4">
+                        {{ Str::limit($item->description, 80) }}
+                    </p>
+
                     <div class="mt-auto">
-                        {{-- Progress Bar (Menggunakan variabel dari Model) --}}
-                        <div class="progress mb-2" style="height: 5px;">
+                        {{-- LOGIKA PINTAR: Cek kolom baru, kalau kosong cek kolom lama --}}
+                        @php
+                            // Ambil Target (Prioritas: target_amount -> target_dana -> 0)
+                            $target = $item->target_amount ?? $item->target_dana ?? 0;
+                            
+                            // Ambil Terkumpul (Prioritas: current_amount -> nominal_terkumpul -> 0)
+                            $terkumpul = $item->current_amount ?? $item->nominal_terkumpul ?? 0;
+
+                            // Hitung Persen
+                            $persen = 0;
+                            if($target > 0) {
+                                $persen = ($terkumpul / $target) * 100;
+                                $persen = min(100, $persen); // Mentok di 100%
+                            }
+                        @endphp
+
+                        {{-- Progress Bar --}}
+                        <div class="progress mb-2" style="height: 6px;">
                             <div class="progress-bar bg-primary" role="progressbar" 
-                                 style="width: {{ $item->persentase }}%"
-                                 aria-valuenow="{{ $item->persentase }}" aria-valuemin="0" aria-valuemax="100">
+                                 style="width: {{ $persen }}%"
+                                 aria-valuenow="{{ $persen }}" aria-valuemin="0" aria-valuemax="100">
                             </div>
                         </div>                       
-                        {{-- Info Angka (Menggunakan variabel dari Model) --}}
+                        
+                        {{-- Info Angka --}}
                         <div class="d-flex justify-content-between small fw-bold mb-3">
                             <div>
                                 <span class="text-muted fw-normal">Terkumpul:</span><br> 
-                                <span class="text-success">Rp {{ number_format($item->total_donasi_fix, 0, ',', '.') }}</span>
+                                <span class="text-success">Rp {{ number_format($terkumpul, 0, ',', '.') }}</span>
                             </div>
                             <div class="text-end">
                                 <span class="text-muted fw-normal">Target:</span><br> 
-                                <span>Rp {{ number_format($item->target_dana, 0, ',', '.') }}</span>
+                                <span>Rp {{ number_format($target, 0, ',', '.') }}</span>
                             </div>
                         </div>
+                        
                         {{-- Tombol Link ke Detail --}}
-                        <a href="{{ route('campaign.show', $item->id) }}" class="btn btn-dark w-100">Donasi Sekarang</a>
+                        <a href="{{ route('campaign.show', $item->id) }}" class="btn btn-dark w-100">
+                            Donasi Sekarang
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
         @empty
             <div class="col-12 text-center py-5">
-                <div class="alert alert-info">Belum ada campaign donasi saat ini.</div>
+                <div class="alert alert-info d-inline-block px-5">
+                    <i class="fas fa-info-circle me-2"></i> Belum ada campaign donasi saat ini.
+                </div>
             </div>
         @endforelse
     </div>

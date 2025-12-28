@@ -3,30 +3,43 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Donasi; // PENTING: Panggil Model Donasi
+use App\Models\Donasi; 
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
     public function index()
     {
-        // 1. Ambil data donasi dari yang terbaru
-        $donasi = Donasi::latest()->get();
+        // 1. Ambil data donasi terbaru dengan Pagination (10 per halaman)
+        $donasi = Donasi::latest()->paginate(10);
 
-        // 2. Kirim data ke view admin/dashboard.blade.php
-        return view('admin.dashboard', compact('donasi'));
+        // 2. Hitung Total Donasi yang SUKSES (status 'paid' atau 'approved')
+        $totalDonasi = Donasi::whereIn('status', ['paid', 'approved', 'settlement'])->sum('amount');
+
+        // 3. Kirim data ke view
+        return view('admin.dashboard', compact('donasi', 'totalDonasi'));
     }
 
+    // Fungsi Approval Manual (Misal untuk Transfer Manual atau Override)
     public function approveDonation($id)
     {
-    // Cari data donasi
-    $donasi = Donasi::findOrFail($id);
-    
-    // Ubah status jadi approved
-    $donasi->status = 'approved';
-    $donasi->save();
+        $donasi = Donasi::findOrFail($id);
+        
+        // Ubah status jadi 'approved' (Istilah untuk sukses)
+        $donasi->status = 'approved';
+        $donasi->save();
 
-    // Kembali ke halaman sebelumnya dengan pesan sukses
-    return redirect()->back()->with('success', 'Donasi berhasil diterima!');
+        return redirect()->back()->with('success', 'Status donasi berhasil diubah menjadi Diterima/Approved!');
+    }
+
+    // Fungsi Batalkan Donasi
+    public function rejectDonation($id)
+    {
+        $donasi = Donasi::findOrFail($id);
+        
+        $donasi->status = 'rejected';
+        $donasi->save();
+
+        return redirect()->back()->with('error', 'Donasi ditolak/dibatalkan.');
     }
 }
-
